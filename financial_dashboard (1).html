@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Financial Analysis Dashboard</title>
+<style>
+:root{
+  --green-950:#0b2e1a;
+  --green-900:#0f3d22;
+  --green-800:#14502c;
+  --green-700:#1b6b3a;
+  --green-600:#237a42;
+  --green-500:#2e9650;
+  --green-400:#52b06c;
+  --green-300:#86c99a;
+  --green-200:#bfe3cb;
+  --green-100:#e3f3e7;
+  --gray-700:#5a6b62;
+  --gray-500:#8a9690;
+  --gray-300:#d7ded9;
+  --bg:#f4f7f5;
+  --card:#ffffff;
+  --red:#c0392b;
+  --gold:#d4a017;
+  --ink:#16241c;
+}
+*{box-sizing:border-box;}
+html,body{
+  margin:0;padding:0;
+  height:100%;
+  width:100%;
+  font-family:'Segoe UI',Helvetica,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow:hidden;
+}
+.app{
+  display:flex;
+  height:100vh;
+  width:100vw;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:200px;
+  min-width:200px;
+  background:linear-gradient(180deg,var(--green-950),var(--green-900) 60%, var(--green-950));
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  padding:10px 12px;
+  overflow-y:auto;
+}
+.sidebar-logo{
+  display:flex;align-items:center;gap:7px;
+  font-weight:700;font-size:12px;letter-spacing:.3px;
+  padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.12);
+  margin-bottom:8px;
+}
+.sidebar-logo .ico{
+  width:18px;height:18px;border-radius:4px;background:var(--gold);
+  display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--green-950);
+}
+.side-section-title{
+  font-size:9.5px;font-weight:700;letter-spacing:.6px;color:var(--green-300);
+  display:flex;align-items:center;gap:5px;margin:6px 0 6px;text-transform:uppercase;
+}
+.insight{
+  display:flex;gap:7px;margin-bottom:7px;
+}
+.insight .dot{
+  width:20px;height:20px;border-radius:50%;background:var(--green-700);
+  display:flex;align-items:center;justify-content:center;font-size:10px;flex:none;
+}
+.insight .txt b{display:block;font-size:10.5px;font-weight:700;color:#fff;line-height:1.15;}
+.insight .txt span{display:block;font-size:9px;color:var(--green-200);line-height:1.3;margin-top:1px;}
+.about-box{
+  background:rgba(255,255,255,.06);
+  border-radius:6px;
+  padding:8px 9px;
+  font-size:9.5px;
+  line-height:1.4;
+  color:var(--green-200);
+  margin-bottom:6px;
+}
+.about-box .side-section-title{margin-top:0;}
+.sidebar-spacer{flex:1; min-height:14px;}
+.meta-list{list-style:none;margin:0 0 0 -4px;padding:8px 0 0 0;border-top:1px solid rgba(255,255,255,.12);font-size:8.5px;color:var(--green-200);}
+.meta-list li{display:flex;gap:4px;padding:3px 0;align-items:center;white-space:nowrap;flex-wrap:nowrap;}
+.meta-list b{color:#fff;font-weight:700;white-space:nowrap;}
+
+/* ===== MAIN ===== */
+.main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  height:100vh;
+  padding:8px 10px 6px 10px;
+  gap:7px;
+}
+
+/* Header */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--card);
+  border-radius:8px;
+  padding:8px 14px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
+  flex:none;
+}
+.title-block{display:flex;align-items:center;gap:9px;}
+.title-block .logo{
+  width:30px;height:30px;border-radius:7px;
+  background:linear-gradient(135deg,var(--green-700),var(--green-500));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;flex:none;
+}
+.title-block h1{font-size:15.5px;margin:0;font-weight:800;letter-spacing:.2px;color:var(--ink);}
+.title-block p{font-size:9.5px;margin:1px 0 0;color:var(--gray-700);}
+
+.filters{display:flex;align-items:center;gap:7px;}
+.filter-box{
+  border:1px solid var(--gray-300);
+  border-radius:6px;
+  padding:5px 9px;
+  font-size:9.5px;
+  color:var(--ink);
+  background:#fff;
+  display:flex;flex-direction:column;
+  min-width:78px;
+  cursor:pointer;
+  position:relative;
+}
+.filter-box.daterange{min-width:148px;}
+.filter-box label{font-size:7.5px;color:var(--gray-700);font-weight:600;letter-spacing:.2px;text-transform:uppercase;}
+.filter-box .val{font-size:10px;font-weight:600;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:5px;}
+.filter-box select{
+  border:none;outline:none;background:transparent;font-size:10px;font-weight:600;color:var(--ink);
+  appearance:none;-webkit-appearance:none;padding:0;cursor:pointer;width:100%;
+}
+.reset-btn{
+  background:var(--green-700);color:#fff;border:none;border-radius:6px;
+  padding:7px 12px;font-size:10px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;
+  flex:none;
+}
+.reset-btn:hover{background:var(--green-600);}
+
+/* KPI row */
+.kpi-row{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:7px;
+  flex:none;
+}
+.kpi-card{
+  background:var(--card);
+  border-radius:8px;
+  padding:7px 10px 5px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+.kpi-top{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+.kpi-icon{
+  width:20px;height:20px;border-radius:50%;flex:none;
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;
+}
+.kpi-label{font-size:7.8px;font-weight:700;color:var(--gray-700);letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kpi-value{font-size:17px;font-weight:800;color:var(--ink);line-height:1.1;}
+.kpi-delta{font-size:8.5px;font-weight:700;margin-top:1px;display:flex;align-items:center;gap:3px;}
+.kpi-delta.up{color:var(--green-600);}
+.kpi-delta.down{color:var(--red);}
+.kpi-spark{height:22px;margin-top:2px;}
+
+/* Grid for charts */
+.charts-area{
+  flex:1;
+  display:grid;
+  grid-template-rows: 1.55fr 1fr 0.92fr;
+  gap:7px;
+  min-height:0;
+}
+.row1{display:grid;grid-template-columns: 1.9fr 1.05fr 1fr;gap:7px;min-height:0;}
+.row2{display:grid;grid-template-columns: 1.5fr 1.2fr 1.2fr;gap:7px;min-height:0;}
+.row3{display:grid;grid-template-columns: 1fr 0.85fr 1.3fr;gap:7px;min-height:0;}
+
+.panel{
+  background:var(--card);
+  border-radius:8px;
+  padding:7px 10px 6px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  min-width:0;
+  overflow:hidden;
+}
+.panel-title{
+  font-size:9.5px;font-weight:800;letter-spacing:.3px;color:var(--ink);
+  margin-bottom:4px;flex:none;text-transform:uppercase;
+}
+.panel-body{flex:1;min-height:0;position:relative;}
+.svg-host{width:100%;height:100%;position:absolute;top:0;left:0;}
+.kpi-spark{position:relative;}
+.donut-canvas-box .svg-host{position:absolute;}
+
+/* category/region grid tiles */
+.tile-grid{
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  gap:5px;flex:1;min-height:0;
+}
+.tile{
+  border-radius:6px;
+  padding:6px 8px;
+  display:flex;flex-direction:column;justify-content:center;
+  color:#fff;
+  min-height:0;
+}
+.tile .t-label{font-size:8px;font-weight:700;opacity:.92;letter-spacing:.2px;text-transform:uppercase;}
+.tile .t-value{font-size:14.5px;font-weight:800;margin-top:1px;}
+.tile .t-pct{font-size:8px;opacity:.85;margin-top:1px;}
+
+/* horizontal bar list (profit by category/region) */
+.hbar-list{display:flex;flex-direction:column;gap:4px;flex:1;justify-content:center;min-height:0;}
+.hbar-row{display:flex;align-items:center;gap:6px;}
+.hbar-name{font-size:8px;color:var(--gray-700);width:58px;flex:none;font-weight:600;text-align:right;}
+.hbar-track{flex:1;background:var(--green-100);border-radius:3px;height:11px;position:relative;overflow:hidden;}
+.hbar-fill{height:100%;border-radius:3px;}
+.hbar-val{font-size:8px;font-weight:700;color:var(--ink);width:44px;flex:none;}
+
+/* donut legend */
+.donut-wrap{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:stretch;gap:8px;}
+.donut-canvas-box{position:relative;flex:1 1 0;min-width:0;min-height:0;}
+.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;width:62%;}
+.donut-center .dv{font-size:11px;font-weight:800;color:var(--ink);line-height:1.1;}
+.donut-center .dl{font-size:5.8px;color:var(--gray-700);font-weight:600;text-transform:uppercase;letter-spacing:.2px;}
+.legend-list{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;font-size:8.5px;}
+.legend-row{display:flex;align-items:center;gap:5px;justify-content:space-between;}
+.legend-row .ldot{width:8px;height:8px;border-radius:2px;flex:none;}
+.legend-row .lname{flex:1;color:var(--gray-700);font-weight:600;display:flex;align-items:center;gap:5px;}
+.legend-row .lval{font-weight:700;color:var(--ink);}
+.legend-row .lpct{color:var(--gray-700);width:32px;text-align:right;}
+
+.footer-bar{
+  flex:none;
+  text-align:center;
+  font-size:7.5px;
+  color:var(--green-200);
+  background:var(--green-950);
+  padding:3.5px 0;
+  border-radius:6px;
+}
+.footer-bar b{color:#fff;font-size:7.5px;}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-thumb{background:var(--green-300);border-radius:3px;}
+
+.chart-tooltip{
+  position:fixed;
+  pointer-events:none;
+  background:rgba(15,38,26,0.96);
+  color:#fff;
+  font-size:10.5px;
+  line-height:1.4;
+  padding:6px 10px;
+  border-radius:6px;
+  box-shadow:0 4px 14px rgba(0,0,0,.22);
+  z-index:1000;
+  display:none;
+  white-space:nowrap;
+  transform:translate(-50%,-100%);
+  font-weight:500;
+}
+.chart-tooltip b{color:var(--green-300);font-weight:700;}
+.chart-tooltip .tt-title{font-weight:700;color:#fff;margin-bottom:2px;display:block;}
+
+.dd-panel{
+  position:absolute;top:100%;left:0;margin-top:4px;
+  background:#fff;border:1px solid var(--gray-300);border-radius:6px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);
+  z-index:50;
+  min-width:160px;
+  padding:6px;
+  font-size:10px;
+  display:none;
+}
+.dd-panel.open{display:block;}
+.dd-panel label{display:flex;align-items:center;gap:6px;padding:4px 5px;border-radius:4px;cursor:pointer;font-weight:500;}
+.dd-panel label:hover{background:var(--green-100);}
+.dd-panel label.dd-all-option{font-weight:700;color:var(--green-800);}
+.dd-panel .dd-divider{height:1px;background:var(--gray-300);margin:3px 2px 4px;}
+.dd-panel.daterange-dd{min-width:230px;}
+.dd-panel.daterange-dd .dr-row{display:flex;gap:6px;margin-bottom:6px;}
+.dd-panel.daterange-dd input[type=date]{font-size:10px;padding:4px;border:1px solid var(--gray-300);border-radius:4px;width:100%;}
+.dd-apply{background:var(--green-700);color:#fff;border:none;border-radius:5px;padding:5px 0;width:100%;font-size:10px;font-weight:700;cursor:pointer;margin-top:2px;}
+</style>
+</head>
+<body>
+<div id="chart-tooltip" class="chart-tooltip"></div>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo"><div class="ico">★</div> KEY INSIGHTS</div>
+
+    <div class="insight"><div class="dot">📈</div><div class="txt"><b>Revenue</b><span id="ins-revenue">Loading…</span></div></div>
+    <div class="insight"><div class="dot">💰</div><div class="txt"><b>Profit</b><span id="ins-profit">Loading…</span></div></div>
+    <div class="insight"><div class="dot">%</div><div class="txt"><b>Profit Margin</b><span id="ins-margin">Loading…</span></div></div>
+    <div class="insight"><div class="dot">👤</div><div class="txt"><b>Top Age Group</b><span id="ins-age">Loading…</span></div></div>
+    <div class="insight"><div class="dot">🏷️</div><div class="txt"><b>Top Category</b><span id="ins-cat">Loading…</span></div></div>
+    <div class="insight"><div class="dot">📍</div><div class="txt"><b>Top Region</b><span id="ins-region">Loading…</span></div></div>
+    <div class="insight"><div class="dot">⭐</div><div class="txt"><b>Satisfaction</b><span id="ins-sat">Loading…</span></div></div>
+
+    <div class="about-box">
+      <div class="side-section-title">ⓘ ABOUT THIS DASHBOARD</div>
+      This dashboard provides a complete overview of financial performance across regions, products and customer segments.
+    </div>
+
+    <div class="sidebar-spacer"></div>
+
+    <ul class="meta-list">
+      <li>👤 Total Customers: <b id="m-customers">–</b></li>
+      <li>🧾 Total Transactions: <b id="m-transactions">–</b></li>
+      <li>📅 Data Period: <b>Jan 1, 2023 - Apr 14, 2026</b></li>
+      <li>🗄️ Data Source: <b>Financial Database</b></li>
+      <li>🕒 Last Updated: <b>Jun 26, 2026 06:27</b></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="title-block">
+        <div class="logo">📊</div>
+        <div>
+          <h1>FINANCIAL ANALYSIS DASHBOARD</h1>
+          <p>Comprehensive Overview of Financial Performance</p>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="filter-box daterange" id="f-date">
+          <label>📅 Date Range</label>
+          <div class="val"><span id="f-date-label">01 Jan 2023 - 14 Apr 2026</span> ▾</div>
+          <div class="dd-panel daterange-dd" id="dd-date">
+            <div class="dr-row">
+              <div><label style="display:block;font-size:8px;color:#666;">From</label><input type="date" id="date-from" value="2023-01-01" min="2023-01-01" max="2026-04-14"></div>
+              <div><label style="display:block;font-size:8px;color:#666;">To</label><input type="date" id="date-to" value="2026-04-14" min="2023-01-01" max="2026-04-14"></div>
+            </div>
+            <button class="dd-apply" id="date-apply">Apply</button>
+          </div>
+        </div>
+        <div class="filter-box" id="f-region">
+          <label>Region</label>
+          <div class="val"><span id="f-region-label">All</span> ▾</div>
+          <div class="dd-panel" id="dd-region"></div>
+        </div>
+        <div class="filter-box" id="f-category">
+          <label>Product Category</label>
+          <div class="val"><span id="f-category-label">All</span> ▾</div>
+          <div class="dd-panel" id="dd-category"></div>
+        </div>
+        <div class="filter-box" id="f-gender">
+          <label>Gender</label>
+          <div class="val"><span id="f-gender-label">All</span> ▾</div>
+          <div class="dd-panel" id="dd-gender"></div>
+        </div>
+        <div class="filter-box" id="f-agegroup">
+          <label>Age Group</label>
+          <div class="val"><span id="f-agegroup-label">All</span> ▾</div>
+          <div class="dd-panel" id="dd-agegroup"></div>
+        </div>
+        <button class="reset-btn" id="reset-filters">↻ Reset Filters</button>
+      </div>
+    </div>
+
+    <!-- KPI ROW -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-top"><div class="kpi-icon" style="background:var(--green-700);">$</div><div class="kpi-label">Total Revenue</div></div>
+        <div class="kpi-value" id="kpi-revenue">$0</div>
+        <div class="kpi-delta" id="kpi-revenue-delta"></div>
+        <div class="kpi-spark"><div class="svg-host" id="spark-revenue"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top"><div class="kpi-icon" style="background:var(--gold);">$</div><div class="kpi-label">Total Profit</div></div>
+        <div class="kpi-value" id="kpi-profit">$0</div>
+        <div class="kpi-delta" id="kpi-profit-delta"></div>
+        <div class="kpi-spark"><div class="svg-host" id="spark-profit"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top"><div class="kpi-icon" style="background:var(--green-600);">%</div><div class="kpi-label">Avg. Profit Margin</div></div>
+        <div class="kpi-value" id="kpi-margin">0%</div>
+        <div class="kpi-delta" id="kpi-margin-delta"></div>
+        <div class="kpi-spark"><div class="svg-host" id="spark-margin"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top"><div class="kpi-icon" style="background:var(--green-800);">📦</div><div class="kpi-label">Total Units Sold</div></div>
+        <div class="kpi-value" id="kpi-units">0</div>
+        <div class="kpi-delta" id="kpi-units-delta"></div>
+        <div class="kpi-spark"><div class="svg-host" id="spark-units"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top"><div class="kpi-icon" style="background:var(--gold);">★</div><div class="kpi-label">Avg. Customer Satisfaction</div></div>
+        <div class="kpi-value" id="kpi-satisfaction">0 / 10</div>
+        <div class="kpi-delta" id="kpi-satisfaction-delta"></div>
+        <div class="kpi-spark"><div class="svg-host" id="spark-satisfaction"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top"><div class="kpi-icon" style="background:var(--green-900);">🧾</div><div class="kpi-label">Avg. Order Value</div></div>
+        <div class="kpi-value" id="kpi-aov">$0</div>
+        <div class="kpi-delta" id="kpi-aov-delta"></div>
+        <div class="kpi-spark"><div class="svg-host" id="spark-aov"></div></div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="charts-area">
+      <div class="row1">
+        <div class="panel">
+          <div class="panel-title">Revenue Trend Over Time</div>
+          <div class="panel-body"><div class="svg-host" id="chart-revenue-trend"></div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Revenue by Product Category</div>
+          <div class="panel-body"><div class="tile-grid" id="tiles-category"></div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Revenue by Region</div>
+          <div class="panel-body"><div class="svg-host" id="chart-revenue-region"></div></div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="panel">
+          <div class="panel-title">Profit vs Revenue</div>
+          <div class="panel-body"><div class="svg-host" id="chart-profit-revenue"></div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Profit by Product Category</div>
+          <div class="panel-body"><div class="hbar-list" id="hbar-category"></div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Profit by Region</div>
+          <div class="panel-body"><div class="hbar-list" id="hbar-region"></div></div>
+        </div>
+      </div>
+
+      <div class="row3">
+        <div class="panel">
+          <div class="panel-title">Revenue by Age Group</div>
+          <div class="panel-body"><div class="svg-host" id="chart-age-group"></div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Revenue by Gender</div>
+          <div class="panel-body"><div class="donut-wrap">
+            <div class="donut-canvas-box">
+              <div class="svg-host" id="chart-gender-donut"></div>
+              <div class="donut-center"><div class="dv" id="donut-total">$0</div><div class="dl">Total Revenue</div></div>
+            </div>
+            <div class="legend-list" id="legend-gender"></div>
+          </div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Transactions Over Time</div>
+          <div class="panel-body"><div class="svg-host" id="chart-transactions"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar"><b>Vibha Rana</b> | Analytics Specialist</div>
+  </main>
+</div>
+
+<script>
+const RAW_DATA = [["2023-06-25",47.0,"Other","South","Retail",14,37876,8.0,27702.64,73.14,"46-55"],["2024-06-21",28.0,"Male","West","Retail",7,27896,2.0,14158.44,50.75,"26-35"],["2024-05-17",27.0,"Female","West","Electronics",13,41339,4.0,32641.05,78.96,"26-35"],["2023-07-31",49.0,"Male","West","Retail",12,31008,3.0,14482.24,46.7,"46-55"],["2025-07-08",56.0,"Other","East","Retail",6,9737,1.0,8789.63,90.27,"above 56"],["2024-06-19",64.0,"Female","West","Finance",17,8250,6.0,4752.0,57.6,"above 56"],["2023-12-12",43.0,"Female","East","Retail",18,37911,4.0,27272.24,71.94,"36-45"],["2024-01-02",57.0,"Female","West","Healthcare",3,36639,2.0,19613.42,53.53,"above 56"],["2024-07-08",25.0,"Other","East","Retail",16,8733,5.0,5049.71,57.82,"18-25"],["2024-12-31",28.0,"Other","West","Healthcare",4,23068,9.0,15941.4,69.11,"26-35"],["2025-06-23",35.0,"Male","East","Software",15,19788,10.0,7304.12,36.91,"26-35"],["2026-04-06",35.0,"Female","West","Healthcare",3,26962,8.0,24135.9,89.52,"26-35"],["2025-12-28",34.0,"Female","West","Finance",15,24139,6.0,12815.57,53.09,"26-35"],["2024-01-27",30.0,"Female","North","Electronics",17,23860,9.0,12307.6,51.58,"26-35"],["2025-07-29",51.0,"Other","North","Software",18,16465,2.0,8904.35,54.08,"46-55"],["2026-01-04",31.0,"Other","East","Electronics",16,19840,4.0,15448.8,77.87,"26-35"],["2025-04-03",40.0,"Other","West","Electronics",15,23978,7.0,19912.98,83.05,"36-45"],["2023-09-08",57.0,"Female","West","Finance",17,12299,7.0,5430.26,44.15,"above 56"],["2025-10-27",18.0,"Female","North","Electronics",10,22246,1.0,16355.48,73.52,"above 56"],["2025-12-04",40.0,"Male","West","Retail",10,49470,8.0,39251.1,79.34,"36-45"],["2026-03-22",63.0,"Male","East","Healthcare",19,27276,9.0,24288.16,89.05,"above 56"],["2023-07-03",19.0,"Male","North","Retail",10,47848,10.0,37036.8,77.41,"18-25"],["2025-08-07",62.0,"Other","West","Healthcare",17,45201,8.0,40290.96,89.14,"above 56"],["2026-02-10",19.0,"Female","East","Retail",8,8607,2.0,6698.37,77.82,"18-25"],["2025-02-02",66.0,"Female","West","Software",19,19285,10.0,5748.5,29.81,"above 56"],["2023-10-18",44.0,"Female","East","Software",10,31511,6.0,20247.7,64.26,"36-45"],["2023-11-09",59.0,"Female","East","Finance",9,24107,9.0,11164.67,46.31,"above 56"],["2023-07-21",42.0,"Female","West","Electronics",9,3220,6.0,-441.4,-13.71,"36-45"],["2024-07-04",62.0,"Other","North","Electronics",13,7793,9.0,-2917.55,-37.44,"above 56"],["2025-02-11",66.0,"Male","West","Software",3,26164,10.0,21412.44,81.84,"above 56"],["2024-05-09",21.0,"Male","South","Healthcare",15,11384,9.0,5712.32,50.18,"18-25"],["2026-03-07",30.0,"Other","North","Electronics",19,43408,8.0,37461.36,86.3,"26-35"],["2026-01-01",25.0,"Other","North","Healthcare",12,45080,7.0,29074.2,64.49,"18-25"],["2025-08-02",42.0,"Male","North","Electronics",2,29427,3.0,24667.49,83.83,"36-45"],["2023-09-15",65.0,"Male","West","Healthcare",17,49787,2.0,42956.3,86.28,"above 56"],["2024-02-05",49.0,"Male","West","Finance",17,37047,5.0,30827.48,83.21,"46-55"],["2025-07-29",57.0,"Female","East","Healthcare",16,38318,2.0,20926.32,54.61,"above 56"],["2024-08-27",25.0,"Other","East","Healthcare",9,29837,10.0,21383.15,71.67,"18-25"],["2025-02-03",19.0,"Female","West","Electronics",13,45523,3.0,33541.7,73.68,"18-25"],["2023-10-07",43.0,"Female","East","Retail",17,34042,10.0,19873.18,58.38,"36-45"],["2025-01-15",31.0,"Male","North","Electronics",3,31335,7.0,11728.15,37.43,"26-35"],["2025-03-14",18.0,"Male","West","Finance",19,20457,9.0,10175.29,49.74,"above 56"],["2026-03-21",46.0,"Female","West","Software",12,21282,5.0,6462.3,30.37,"46-55"],["2023-04-03",69.0,"Male","South","Retail",3,44012,8.0,40657.4,92.38,"above 56"],["2025-01-29",23.0,"Male","West","Retail",1,25689,8.0,9495.96,36.97,"18-25"],["2023-12-23",57.0,"Other","West","Finance",19,48083,2.0,37756.53,78.52,"above 56"],["2025-07-20",42.0,"Female","South","Finance",19,16158,5.0,7986.4,49.43,"36-45"],["2024-04-26",26.0,"Male","East","Finance",6,27250,1.0,15931.0,58.46,"26-35"],["2024-08-02",40.0,"Male","West","Healthcare",19,28408,6.0,16313.64,57.43,"36-45"],["2024-04-26",66.0,"Female","East","Finance",9,44074,3.0,27063.68,61.41,"above 56"],["2025-11-09",61.0,"Other","East","Retail",15,13917,8.0,11450.66,82.28,"above 56"],["2025-07-12",58.0,"Other","South","Electronics",6,35685,10.0,30833.35,86.4,"above 56"],["2025-02-26",39.0,"Male","North","Software",15,23345,1.0,21194.2,90.79,"36-45"],["2023-02-03",28.0,"Female","East","Retail",4,6135,6.0,1531.0,24.96,"26-35"],["2026-02-21",64.0,"Female","South","Electronics",3,48296,3.0,33177.64,68.7,"above 56"],["2025-01-11",45.0,"Other","North","Electronics",10,23917,9.0,16804.75,70.26,"36-45"],["2025-09-16",30.0,"Female","North","Finance",18,37397,1.0,17955.02,48.01,"26-35"],["2026-02-28",42.0,"Male","West","Software",8,21116,4.0,17399.68,82.4,"36-45"],["2026-01-12",19.0,"Other","East","Electronics",19,19313,7.0,11580.22,59.96,"18-25"],["2024-02-07",67.0,"Other","South","Finance",2,28941,9.0,17262.01,59.65,"above 56"],["2023-01-22",22.0,"Other","East","Finance",14,10840,5.0,3655.8,33.73,"18-25"],["2023-07-23",54.0,"Other","West","Finance",18,2000,6.0,-4991.0,-249.55,"46-55"],["2023-02-17",49.0,"Other","East","Healthcare",11,41778,8.0,38001.32,90.96,"46-55"],["2025-02-23",43.0,"Female","East","Healthcare",12,2380,9.0,1076.0,45.21,"36-45"],["2024-06-08",26.0,"Female","West","Software",6,3652,9.0,-2234.6,-61.19,"26-35"],["2023-12-16",21.0,"Female","East","Finance",1,49469,9.0,31795.27,64.27,"18-25"],["2023-04-18",29.0,"Other","South","Finance",10,1210,3.0,-3154.8,-260.73,"26-35"],["2024-01-29",68.0,"Female","North","Retail",10,24413,7.0,9808.58,40.18,"above 56"],["2025-04-24",18.0,"Other","West","Electronics",4,12317,10.0,4139.98,33.61,"above 56"],["2024-09-14",59.0,"Female","South","Electronics",9,33802,5.0,21636.86,64.01,"above 56"],["2024-10-16",18.0,"Other","North","Healthcare",4,17010,2.0,4363.3,25.65,"above 56"],["2024-09-28",39.0,"Other","West","Electronics",14,43980,1.0,26220.0,59.62,"36-45"],["2023-10-04",50.0,"Male","East","Healthcare",11,44809,9.0,25968.39,57.95,"46-55"],["2023-11-06",28.0,"Other","North","Electronics",17,36235,5.0,25947.9,71.61,"26-35"],["2025-04-07",65.0,"Female","East","Finance",12,38831,3.0,32235.83,83.02,"above 56"],["2023-02-05",32.0,"Male","West","Electronics",5,16818,8.0,9616.84,57.18,"26-35"],["2023-09-18",46.0,"Other","West","Finance",14,48636,10.0,42620.76,87.63,"46-55"],["2024-04-01",68.0,"Female","West","Electronics",16,18783,10.0,12721.21,67.73,"above 56"],["2025-10-04",62.0,"Other","East","Software",14,6437,1.0,3541.94,55.02,"above 56"],["2025-08-31",62.0,"Other","North","Finance",3,39793,8.0,35966.21,90.38,"above 56"],["2024-03-10",25.0,"Other","North","Electronics",7,48747,8.0,39446.24,80.92,"18-25"],["2023-02-09",59.0,"Other","North","Finance",14,44722,8.0,31968.92,71.48,"above 56"],["2026-03-01",48.0,"Male","East","Software",5,12170,9.0,5958.3,48.96,"46-55"],["2024-04-05",47.0,"Other","South","Software",3,6795,1.0,-2986.1,-43.95,"46-55"],["2025-04-27",32.0,"Female","West","Software",13,7449,1.0,3307.32,44.4,"26-35"],["2024-07-20",39.0,"Female","East","Finance",13,11513,7.0,-1313.16,-11.41,"36-45"],["2024-11-09",25.0,"Male","West","Healthcare",1,29534,3.0,14619.1,49.5,"18-25"],["2024-01-09",58.0,"Other","East","Retail",1,23711,4.0,14773.23,62.31,"above 56"],["2024-12-11",31.0,"Other","North","Finance",7,18605,7.0,11823.95,63.55,"26-35"],["2023-02-14",21.0,"Male","North","Electronics",14,11289,5.0,-1148.93,-10.18,"18-25"],["2025-09-14",42.0,"Male","South","Software",6,21187,4.0,4543.94,21.45,"36-45"],["2024-10-09",60.0,"Other","East","Software",10,3877,3.0,-5139.95,-132.58,"above 56"],["2024-05-10",68.0,"Female","West","Finance",8,1183,6.0,727.08,61.46,"above 56"],["2023-07-17",50.0,"Other","South","Finance",7,31667,1.0,25386.65,80.17,"46-55"],["2023-04-11",62.0,"Male","West","Software",5,2553,7.0,-4414.59,-172.92,"above 56"],["2025-09-28",35.0,"Other","West","Software",2,3497,8.0,-4929.0,-140.95,"26-35"],["2023-06-19",43.0,"Male","North","Healthcare",7,43424,10.0,22602.32,52.05,"36-45"],["2023-01-30",20.0,"Other","East","Healthcare",14,12219,4.0,8922.96,73.03,"18-25"],["2023-10-10",69.0,"Other","East","Healthcare",9,7037,8.0,2021.86,28.73,"above 56"],["2023-07-10",60.0,"Other","West","Retail",3,4111,3.0,3404.9,82.82,"above 56"],["2024-12-27",42.0,"Other","West","Electronics",10,11719,4.0,-2606.41,-22.24,"36-45"],["2025-11-02",34.0,"Other","South","Electronics",17,5087,7.0,1303.6,25.63,"26-35"],["2024-10-08",42.0,"Male","West","Finance",14,5611,6.0,-841.99,-15.01,"36-45"],["2024-03-19",59.0,"Male","East","Software",14,43908,10.0,33560.2,76.43,"above 56"],["2023-04-17",66.0,"Other","North","Electronics",11,8567,6.0,600.97,7.01,"above 56"],["2024-05-12",56.0,"Other","North","Software",10,36377,6.0,18207.29,50.05,"above 56"],["2024-05-01",42.0,"Female","North","Software",6,37823,6.0,23809.56,62.95,"36-45"],["2024-06-13",41.0,"Other","East","Electronics",11,16750,5.0,9852.0,58.82,"36-45"],["2025-10-26",20.0,"Female","East","Retail",11,5040,6.0,-2291.0,-45.46,"18-25"],["2025-04-27",39.0,"Other","North","Electronics",8,27501,5.0,11250.7,40.91,"36-45"],["2023-02-19",41.0,"Female","South","Finance",8,45441,2.0,36115.72,79.48,"36-45"],["2025-09-27",22.0,"Male","South","Electronics",3,21604,4.0,17351.88,80.32,"18-25"],["2025-09-15",67.0,"Female","East","Healthcare",4,22871,3.0,16091.32,70.36,"above 56"],["2023-07-02",46.0,"Other","South","Electronics",2,21058,5.0,16076.82,76.35,"46-55"],["2024-02-26",54.0,"Male","West","Healthcare",10,9811,1.0,4588.89,46.77,"46-55"],["2024-08-22",68.0,"Male","North","Healthcare",7,49034,4.0,37389.3,76.25,"above 56"],["2024-04-20",24.0,"Female","South","Finance",2,29343,2.0,21768.7,74.19,"18-25"],["2024-08-11",38.0,"Male","South","Healthcare",13,41442,1.0,23571.88,56.88,"36-45"],["2023-08-22",27.0,"Female","South","Finance",18,17084,4.0,14147.4,82.81,"26-35"],["2023-11-28",23.0,"Other","East","Retail",1,26740,10.0,13206.2,49.39,"18-25"],["2025-02-13",54.0,"Other","North","Finance",17,24152,8.0,14568.12,60.32,"46-55"],["2023-08-14",34.0,"Female","North","Retail",3,18658,1.0,7564.72,40.54,"26-35"],["2024-04-14",65.0,"Male","North","Retail",3,1296,3.0,-2037.72,-157.23,"above 56"],["2023-03-27",41.0,"Other","West","Healthcare",19,28786,8.0,12786.5,44.42,"36-45"],["2024-04-21",48.0,"Other","North","Finance",1,10006,5.0,3780.16,37.78,"46-55"],["2023-09-05",29.0,"Female","West","Finance",5,23277,8.0,17673.76,75.93,"26-35"],["2026-01-05",23.0,"Other","East","Retail",17,2297,6.0,943.14,41.06,"18-25"],["2025-07-21",61.0,"Other","West","Electronics",9,31433,1.0,18629.03,59.27,"above 56"],["2023-03-27",43.0,"Other","South","Electronics",4,33084,9.0,19445.76,58.78,"36-45"],["2025-06-30",27.0,"Other","North","Software",7,41963,3.0,23939.58,57.05,"26-35"],["2025-04-30",42.0,"Male","West","Healthcare",1,3546,5.0,-1783.66,-50.3,"36-45"],["2024-07-29",64.0,"Female","West","Finance",7,30610,2.0,21092.1,68.91,"above 56"],["2024-02-05",25.0,"Female","South","Retail",14,45777,1.0,30528.06,66.69,"18-25"],["2025-11-25",60.0,"Female","West","Finance",3,41745,3.0,29063.4,69.62,"above 56"],["2023-10-16",32.0,"Male","South","Retail",19,28106,1.0,16783.64,59.72,"26-35"],["2024-09-21",25.0,"Female","West","Electronics",16,29441,2.0,22062.03,74.94,"18-25"],["2024-12-28",23.0,"Other","South","Healthcare",2,1677,7.0,-1851.39,-110.4,"18-25"],["2025-09-18",55.0,"Other","South","Finance",14,33031,10.0,23572.76,71.37,"46-55"],["2023-06-11",18.0,"Male","East","Healthcare",13,22420,6.0,16206.2,72.28,"above 56"],["2023-02-15",50.0,"Male","South","Healthcare",18,21915,2.0,9447.2,43.11,"46-55"],["2024-04-20",28.0,"Male","North","Retail",12,16809,7.0,3924.38,23.35,"26-35"],["2024-02-03",31.0,"Other","West","Healthcare",10,23301,5.0,17572.95,75.42,"26-35"],["2023-02-15",61.0,"Female","West","Retail",7,49837,6.0,29472.94,59.14,"above 56"],["2025-05-23",69.0,"Other","North","Retail",5,9641,7.0,-660.25,-6.85,"above 56"],["2025-12-02",60.0,"Other","North","Retail",1,36136,1.0,23186.12,64.16,"above 56"],["2025-05-14",65.0,"Male","North","Retail",17,28062,6.0,16866.84,60.11,"above 56"],["2023-10-18",46.0,"Other","South","Finance",1,17351,6.0,8937.84,51.51,"46-55"],["2026-01-24",66.0,"Other","South","Finance",19,40699,2.0,28474.28,69.96,"above 56"],["2023-07-03",60.0,"Male","South","Software",18,30190,6.0,16107.8,53.35,"above 56"],["2023-08-19",20.0,"Male","North","Retail",2,17998,3.0,6642.3,36.91,"18-25"],["2025-07-03",50.0,"Female","North","Electronics",6,37274,10.0,17273.88,46.34,"46-55"],["2023-09-23",42.0,"Other","North","Healthcare",14,27574,8.0,22469.68,81.49,"36-45"],["2023-09-27",24.0,"Other","South","Electronics",1,38965,8.0,32180.6,82.59,"18-25"],["2023-01-02",51.0,"Other","South","Software",13,36728,4.0,24834.36,67.62,"46-55"],["2025-06-29",24.0,"Female","South","Software",1,41197,10.0,26424.81,64.14,"18-25"],["2023-07-28",65.0,"Female","South","Retail",6,47662,4.0,30660.16,64.33,"above 56"],["2024-07-14",65.0,"Female","East","Software",7,15283,1.0,10089.44,66.02,"above 56"],["2025-10-03",57.0,"Female","East","Healthcare",13,3112,3.0,-5877.16,-188.85,"above 56"],["2026-03-31",69.0,"Other","West","Finance",1,13753,1.0,6529.87,47.48,"above 56"],["2025-09-06",32.0,"Male","West","Software",2,42291,2.0,36103.36,85.37,"26-35"],["2023-09-13",33.0,"Other","South","Retail",18,35580,7.0,31174.8,87.62,"26-35"],["2024-07-30",54.0,"Male","North","Healthcare",14,12843,9.0,6862.24,53.43,"46-55"],["2024-04-06",42.0,"Other","West","Electronics",4,18717,7.0,9546.62,51.01,"36-45"],["2024-06-23",31.0,"Other","East","Finance",17,13907,3.0,6058.02,43.56,"26-35"],["2023-06-06",24.0,"Female","South","Software",12,35646,1.0,22341.82,62.68,"18-25"],["2025-10-29",58.0,"Other","South","Software",2,23034,6.0,13940.62,60.52,"above 56"],["2024-09-04",35.0,"Other","North","Electronics",3,9985,2.0,6479.95,64.9,"26-35"],["2024-03-04",63.0,"Male","East","Software",13,34049,4.0,24785.61,72.79,"above 56"],["2025-04-02",37.0,"Male","West","Retail",13,26610,4.0,14775.5,55.53,"36-45"],["2024-06-03",43.0,"Other","South","Electronics",7,34735,3.0,22266.4,64.1,"36-45"],["2025-01-23",52.0,"Female","East","Finance",13,34929,6.0,29253.84,83.75,"46-55"],["2023-05-24",28.0,"Other","South","Retail",14,9148,9.0,6995.04,76.47,"26-35"],["2025-10-01",47.0,"Male","West","Finance",8,39535,1.0,24887.8,62.95,"46-55"],["2025-12-04",48.0,"Male","East","Retail",5,1126,3.0,-1457.72,-129.46,"46-55"],["2024-06-05",26.0,"Other","North","Finance",19,5922,6.0,-4519.98,-76.33,"26-35"],["2024-03-16",40.0,"Male","South","Electronics",17,32230,7.0,26769.4,83.06,"36-45"],["2025-09-21",36.0,"Other","South","Software",14,20697,2.0,11590.51,56.0,"36-45"],["2023-06-26",43.0,"Male","West","Healthcare",9,41639,10.0,30742.66,73.83,"36-45"],["2024-10-01",42.0,"Male","South","Retail",14,11439,1.0,837.74,7.32,"36-45"],["2025-07-06",65.0,"Female","North","Healthcare",4,2433,3.0,-3166.58,-130.15,"above 56"],["2023-05-25",37.0,"Male","South","Retail",19,26450,4.0,15592.0,58.95,"36-45"],["2023-01-12",66.0,"Male","South","Finance",11,6165,2.0,4182.5,67.84,"above 56"],["2026-03-30",18.0,"Female","South","Electronics",19,12026,2.0,2445.16,20.33,"above 56"],["2025-03-19",54.0,"Female","North","Healthcare",10,9499,6.0,7587.19,79.87,"46-55"],["2023-03-11",64.0,"Male","South","Electronics",9,29062,10.0,15370.6,52.89,"above 56"],["2023-02-19",42.0,"Female","South","Finance",5,37074,1.0,35146.52,94.8,"36-45"],["2024-01-02",49.0,"Male","West","Electronics",7,33925,2.0,13632.0,40.18,"46-55"],["2024-05-05",23.0,"Female","North","Retail",6,39062,9.0,36598.28,93.69,"18-25"],["2024-03-12",65.0,"Other","East","Electronics",9,1440,4.0,-7828.6,-543.65,"above 56"],["2024-10-09",18.0,"Other","West","Finance",13,28185,10.0,15149.25,53.75,"above 56"],["2023-04-03",41.0,"Female","East","Software",16,44232,9.0,34792.88,78.66,"36-45"],["2024-11-21",58.0,"Male","East","Electronics",14,13138,3.0,5237.68,39.87,"above 56"],["2025-04-26",27.0,"Female","South","Software",6,11860,7.0,6994.8,58.98,"26-35"],["2024-07-13",21.0,"Female","South","Software",6,43405,9.0,34358.65,79.16,"18-25"],["2025-08-16",65.0,"Other","West","Finance",8,22350,5.0,10223.0,45.74,"above 56"],["2024-04-06",56.0,"Other","West","Healthcare",11,43566,3.0,21698.2,49.81,"above 56"],["2026-02-03",54.0,"Female","North","Healthcare",6,19308,4.0,11128.36,57.64,"46-55"],["2026-01-06",25.0,"Male","North","Software",18,31186,1.0,16375.62,52.51,"18-25"],["2025-12-27",22.0,"Female","South","Software",3,9362,4.0,5389.38,57.57,"18-25"],["2025-11-23",59.0,"Male","South","Software",17,16797,7.0,9689.9,57.69,"above 56"],["2023-11-28",21.0,"Female","North","Software",19,48182,3.0,31992.5,66.4,"18-25"],["2025-12-28",64.0,"Male","East","Software",7,45535,1.0,26861.55,58.99,"above 56"],["2023-08-19",68.0,"Female","East","Retail",3,47258,10.0,23612.86,49.97,"above 56"],["2024-08-30",40.0,"Other","South","Electronics",14,44590,10.0,39657.9,88.94,"36-45"],["2025-02-02",52.0,"Male","North","Finance",4,6393,1.0,-2581.39,-40.38,"46-55"],["2025-10-06",24.0,"Male","South","Healthcare",1,28274,10.0,19100.82,67.56,"18-25"],["2023-03-20",19.0,"Male","West","Retail",1,41943,2.0,29430.27,70.17,"18-25"],["2024-03-03",32.0,"Other","East","Finance",9,2468,6.0,-4896.8,-198.41,"26-35"],["2024-01-16",21.0,"Male","South","Finance",19,45129,4.0,33738.26,74.76,"18-25"],["2025-09-30",40.0,"Male","South","Software",12,19453,3.0,14868.81,76.43,"36-45"],["2024-06-04",29.0,"Other","East","Finance",18,3548,8.0,2244.52,63.26,"26-35"],["2025-05-15",42.0,"Other","West","Finance",14,41903,2.0,37059.94,88.44,"36-45"],["2024-02-11",39.0,"Other","North","Retail",12,41959,1.0,25981.3,61.92,"36-45"],["2023-07-04",47.0,"Female","South","Healthcare",8,29158,7.0,10164.96,34.86,"46-55"],["2023-07-01",42.0,"Female","South","Healthcare",7,43224,1.0,25910.52,59.94,"36-45"],["2023-09-18",41.0,"Female","South","Retail",7,45364,2.0,37163.6,81.92,"36-45"],["2023-02-14",27.0,"Male","North","Software",3,1410,2.0,-829.1,-58.8,"26-35"],["2025-03-22",42.0,"Female","South","Software",16,31260,3.0,26601.0,85.1,"36-45"],["2024-03-09",19.0,"Other","South","Electronics",4,30694,9.0,21679.96,70.63,"18-25"],["2023-10-02",25.0,"Female","East","Healthcare",16,44229,7.0,20277.98,45.85,"18-25"],["2023-07-04",50.0,"Male","South","Software",15,34493,5.0,19151.73,55.52,"46-55"],["2024-10-23",42.0,"Other","South","Retail",18,9697,6.0,6120.42,63.12,"36-45"],["2023-05-02",57.0,"Female","North","Software",10,24960,10.0,19992.0,80.1,"above 56"],["2023-01-19",20.0,"Female","West","Software",1,10525,4.0,-652.25,-6.2,"18-25"],["2025-08-23",32.0,"Female","East","Retail",15,48146,8.0,31140.34,64.68,"26-35"],["2023-09-05",60.0,"Other","North","Software",9,39506,10.0,27969.7,70.8,"above 56"],["2023-01-06",26.0,"Other","East","Healthcare",6,4967,10.0,-4192.69,-84.41,"26-35"],["2026-03-27",27.0,"Male","West","Healthcare",5,7940,7.0,645.8,8.13,"26-35"],["2025-07-27",42.0,"Female","North","Electronics",15,4067,9.0,1289.96,31.72,"36-45"],["2025-07-31",18.0,"Other","West","Electronics",15,7162,1.0,-457.02,-6.38,"above 56"],["2025-12-28",37.0,"Other","West","Finance",13,10127,8.0,7455.52,73.62,"36-45"],["2023-08-27",36.0,"Male","East","Software",3,30709,9.0,19202.29,62.53,"36-45"],["2023-04-13",33.0,"Other","North","Electronics",6,48654,4.0,29947.2,61.55,"26-35"],["2025-06-27",28.0,"Other","West","Software",10,7608,6.0,-4401.32,-57.85,"26-35"],["2025-04-02",28.0,"Other","West","Retail",10,3587,5.0,129.91,3.62,"26-35"],["2026-01-17",22.0,"Female","South","Retail",15,38732,4.0,30121.44,77.77,"18-25"],["2023-04-02",43.0,"Female","East","Retail",3,19957,8.0,15360.58,76.97,"36-45"],["2025-10-16",56.0,"Male","East","Finance",13,17143,10.0,13247.55,77.28,"above 56"],["2024-03-15",24.0,"Female","South","Software",4,46317,2.0,28579.24,61.7,"18-25"],["2025-11-06",26.0,"Other","North","Finance",10,43098,5.0,20394.6,47.32,"26-35"],["2024-05-09",25.0,"Female","East","Software",17,48276,5.0,33999.12,70.43,"18-25"],["2024-10-07",32.0,"Other","West","Finance",18,40705,6.0,37479.95,92.08,"26-35"],["2023-04-15",43.0,"Male","East","Software",4,23998,3.0,11678.36,48.66,"36-45"],["2024-08-28",50.0,"Female","East","Software",19,7996,6.0,2445.28,30.58,"46-55"],["2023-03-15",54.0,"Male","South","Electronics",6,46974,5.0,35368.46,75.29,"46-55"],["2024-11-26",22.0,"Male","South","Software",19,19876,4.0,9890.8,49.76,"18-25"],["2023-10-23",30.0,"Female","West","Retail",18,40696,1.0,36745.2,90.29,"26-35"],["2025-08-24",37.0,"Male","South","Electronics",10,20116,4.0,13227.36,65.76,"36-45"],["2024-07-03",42.0,"Other","West","Retail",13,7039,10.0,-2981.34,-42.35,"36-45"],["2023-12-09",62.0,"Female","East","Healthcare",5,42256,4.0,26205.48,62.02,"above 56"],["2025-03-25",42.0,"Male","North","Electronics",17,13615,9.0,4578.1,33.63,"36-45"],["2024-11-06",53.0,"Other","South","Electronics",4,25099,5.0,21228.12,84.58,"46-55"],["2025-07-05",39.0,"Other","East","Electronics",3,19594,6.0,9625.72,49.13,"36-45"],["2025-06-15",69.0,"Male","West","Electronics",4,48635,9.0,39410.9,81.03,"above 56"],["2023-08-01",38.0,"Male","South","Finance",9,42795,3.0,38529.3,90.03,"36-45"],["2024-06-29",59.0,"Other","North","Electronics",15,41857,5.0,27580.59,65.89,"above 56"],["2023-09-25",23.0,"Other","West","Healthcare",8,35584,9.0,15457.8,43.44,"18-25"],["2023-10-31",63.0,"Male","West","Retail",19,6996,7.0,3085.36,44.1,"above 56"],["2026-03-09",51.0,"Other","West","Retail",11,5443,7.0,3473.38,63.81,"46-55"],["2025-11-26",62.0,"Male","North","Retail",6,44538,6.0,32215.34,72.33,"above 56"],["2024-04-01",23.0,"Other","South","Healthcare",11,7119,4.0,2537.67,35.65,"18-25"],["2024-12-12",23.0,"Other","West","Retail",16,45810,8.0,37184.4,81.17,"18-25"],["2025-04-01",65.0,"Other","East","Retail",1,29257,9.0,22201.58,75.88,"above 56"],["2025-02-14",48.0,"Male","East","Retail",14,21447,7.0,14702.0,68.55,"46-55"],["2024-02-10",18.0,"Female","West","Retail",6,44958,1.0,30674.34,68.23,"above 56"],["2023-05-07",28.0,"Male","North","Retail",7,16581,7.0,9673.71,58.34,"26-35"],["2024-03-10",40.0,"Other","North","Electronics",11,45997,2.0,37670.03,81.9,"36-45"],["2023-08-16",22.0,"Male","West","Retail",17,44339,6.0,31089.2,70.12,"18-25"],["2025-06-13",48.0,"Other","South","Software",4,14534,5.0,5872.0,40.4,"46-55"],["2025-04-29",51.0,"Other","South","Electronics",12,5335,9.0,-5175.15,-97.0,"46-55"],["2025-02-15",64.0,"Male","South","Finance",11,9979,1.0,4073.05,40.82,"above 56"],["2025-06-03",25.0,"Other","East","Finance",18,5374,5.0,1849.46,34.41,"18-25"],["2024-12-20",43.0,"Other","North","Finance",16,5332,10.0,2091.84,39.23,"36-45"],["2025-09-14",67.0,"Other","East","Software",16,31579,5.0,14357.35,45.46,"above 56"],["2024-03-19",50.0,"Female","West","Electronics",6,32785,6.0,21628.15,65.97,"46-55"],["2023-04-14",39.0,"Female","West","Finance",16,9262,5.0,-911.44,-9.84,"36-45"],["2024-08-07",35.0,"Female","North","Healthcare",16,45818,5.0,35091.58,76.59,"26-35"],["2025-06-28",50.0,"Other","North","Healthcare",5,626,10.0,-6485.76,-1036.06,"46-55"],["2026-03-22",20.0,"Male","West","Finance",7,48270,3.0,41453.6,85.88,"18-25"],["2023-07-15",29.0,"Other","West","Finance",19,42617,10.0,29494.45,69.21,"26-35"],["2026-02-22",52.0,"Other","West","Software",2,21907,4.0,12106.86,55.26,"46-55"],["2024-08-31",33.0,"Male","South","Electronics",5,26061,1.0,22670.12,86.99,"26-35"],["2024-12-31",67.0,"Other","East","Software",7,47015,2.0,41894.85,89.11,"above 56"],["2023-12-04",49.0,"Male","East","Electronics",7,20780,10.0,10857.6,52.25,"46-55"],["2023-05-10",39.0,"Male","East","Retail",14,20980,3.0,18660.2,88.94,"36-45"],["2025-03-16",35.0,"Other","North","Electronics",6,48794,5.0,25950.68,53.18,"26-35"],["2025-08-08",34.0,"Other","North","Retail",19,27714,2.0,9838.24,35.5,"26-35"],["2024-05-11",65.0,"Female","East","Finance",19,25156,8.0,11069.12,44.0,"above 56"],["2025-08-27",55.0,"Male","North","Healthcare",15,14013,10.0,10000.09,71.36,"46-55"],["2025-05-09",38.0,"Male","North","Electronics",6,6403,2.0,587.94,9.18,"36-45"],["2024-12-24",28.0,"Female","South","Retail",7,47168,5.0,39452.24,83.64,"26-35"],["2025-05-02",66.0,"Other","East","Retail",4,18057,2.0,5683.61,31.48,"above 56"],["2026-02-09",28.0,"Female","West","Electronics",8,24540,8.0,12282.4,50.05,"26-35"],["2023-05-17",24.0,"Other","North","Electronics",10,6810,3.0,-2062.8,-30.29,"18-25"],["2026-01-13",19.0,"Male","East","Software",17,19075,1.0,17147.5,89.9,"18-25"],["2025-08-02",64.0,"Male","West","Finance",10,24637,7.0,8069.27,32.75,"above 56"],["2026-03-30",67.0,"Male","North","Healthcare",2,4359,7.0,-5851.83,-134.25,"above 56"],["2023-09-12",37.0,"Male","West","Electronics",12,27711,1.0,9419.59,33.99,"36-45"],["2025-06-09",42.0,"Female","North","Electronics",10,26488,2.0,25271.36,95.41,"36-45"],["2025-01-19",40.0,"Other","North","Software",11,41341,3.0,24492.65,59.25,"36-45"],["2025-04-14",41.0,"Other","West","Retail",15,5707,8.0,-1958.54,-34.32,"36-45"],["2025-07-26",63.0,"Female","West","Finance",17,15886,8.0,13401.14,84.36,"above 56"],["2025-11-18",23.0,"Female","East","Software",1,49012,5.0,40924.68,83.5,"18-25"],["2023-03-21",56.0,"Other","North","Software",2,14164,1.0,-90.84,-0.64,"above 56"],["2025-10-09",33.0,"Other","West","Finance",14,36621,10.0,22177.81,60.56,"26-35"],["2024-03-05",49.0,"Female","South","Software",13,3547,7.0,-6000.7,-169.18,"46-55"],["2023-11-26",37.0,"Male","North","Software",4,42273,4.0,29485.86,69.75,"36-45"],["2025-05-23",42.0,"Female","West","Software",18,44142,5.0,30372.24,68.81,"36-45"],["2025-12-01",30.0,"Male","West","Electronics",8,14011,1.0,10327.0,73.71,"26-35"],["2023-10-20",65.0,"Other","South","Electronics",12,45168,5.0,23240.64,51.45,"above 56"],["2024-02-29",30.0,"Other","East","Retail",12,39550,5.0,30695.0,77.61,"26-35"],["2025-02-19",22.0,"Male","South","Software",18,48865,2.0,40711.7,83.31,"18-25"],["2024-11-07",61.0,"Male","West","Finance",3,38104,3.0,22024.52,57.8,"above 56"],["2024-12-10",66.0,"Other","West","Finance",8,40568,8.0,26644.12,65.68,"above 56"],["2023-03-01",61.0,"Male","South","Software",10,49816,3.0,32259.96,64.76,"above 56"],["2026-03-01",38.0,"Female","North","Retail",15,24516,2.0,10975.28,44.77,"36-45"],["2023-06-15",35.0,"Female","South","Retail",2,2993,5.0,-5022.72,-167.82,"26-35"],["2026-01-15",25.0,"Male","North","Software",12,13824,2.0,9814.52,71.0,"18-25"],["2023-01-15",43.0,"Female","West","Retail",10,36910,4.0,25864.6,70.07,"36-45"],["2025-09-23",42.0,"Other","West","Software",7,44989,2.0,33296.87,74.01,"36-45"],["2024-10-21",61.0,"Female","West","Retail",8,896,5.0,-2668.32,-297.8,"above 56"],["2023-06-28",66.0,"Other","West","Software",2,26476,7.0,11650.12,44.0,"above 56"],["2023-12-31",35.0,"Female","West","Electronics",16,2172,5.0,-1004.68,-46.26,"26-35"],["2023-10-21",36.0,"Male","West","Electronics",1,25741,2.0,21540.85,83.68,"36-45"],["2024-05-09",59.0,"Other","North","Retail",17,44338,5.0,36010.06,81.22,"above 56"],["2023-12-10",60.0,"Other","South","Finance",19,25898,6.0,21515.18,83.08,"above 56"],["2024-08-15",44.0,"Male","East","Retail",19,33756,5.0,27382.96,81.12,"36-45"],["2025-08-17",60.0,"Male","North","Retail",2,17341,4.0,13184.72,76.03,"above 56"],["2025-04-22",40.0,"Male","West","Finance",3,24327,5.0,10304.28,42.36,"36-45"],["2025-04-16",30.0,"Female","South","Retail",10,23032,4.0,20761.08,90.14,"26-35"],["2024-09-08",69.0,"Other","North","Software",10,47783,2.0,43254.0,90.52,"above 56"],["2023-05-16",42.0,"Female","North","Retail",2,41151,5.0,27587.72,67.04,"36-45"],["2023-08-23",35.0,"Other","South","Electronics",11,15625,7.0,6497.5,41.58,"26-35"],["2025-04-06",67.0,"Female","South","Finance",7,19430,5.0,9679.4,49.82,"above 56"],["2024-09-16",19.0,"Female","South","Electronics",14,29757,5.0,20720.72,69.63,"18-25"],["2023-09-16",25.0,"Male","West","Retail",16,2062,4.0,-6717.96,-325.8,"18-25"],["2025-03-18",44.0,"Other","West","Retail",17,40707,10.0,22993.34,56.48,"36-45"],["2025-08-10",52.0,"Male","West","Electronics",7,22299,5.0,16018.27,71.83,"46-55"],["2026-01-01",18.0,"Male","East","Healthcare",18,17447,3.0,13946.83,79.94,"above 56"],["2024-09-17",69.0,"Other","West","Finance",6,31991,4.0,23464.63,73.35,"above 56"],["2025-06-08",60.0,"Male","South","Healthcare",13,21196,7.0,7186.88,33.91,"above 56"],["2023-08-23",36.0,"Other","West","Finance",16,28482,7.0,16677.3,58.55,"36-45"],["2026-03-20",42.0,"Female","South","Healthcare",5,46049,3.0,18567.89,40.32,"36-45"],["2024-11-01",44.0,"Other","West","Finance",17,35433,5.0,31957.34,90.19,"36-45"],["2023-04-25",44.0,"Male","South","Software",16,29078,7.0,19292.42,66.35,"36-45"],["2023-06-12",58.0,"Male","East","Software",10,12215,4.0,10571.2,86.54,"above 56"],["2023-03-26",18.0,"Female","South","Electronics",12,21226,7.0,15287.84,72.02,"above 56"],["2026-01-08",18.0,"Other","South","Finance",5,25326,1.0,14604.72,57.67,"above 56"],["2024-02-06",40.0,"Female","West","Software",14,4955,7.0,-5126.9,-103.47,"36-45"],["2023-01-01",43.0,"Other","North","Electronics",17,40702,3.0,27524.38,67.62,"36-45"],["2025-06-15",68.0,"Other","East","Retail",4,36735,1.0,22229.1,60.51,"above 56"],["2023-08-15",29.0,"Other","West","Electronics",3,1721,1.0,-3513.09,-204.13,"26-35"],["2026-02-17",69.0,"Female","East","Retail",15,46032,4.0,27457.84,59.65,"above 56"],["2026-02-16",18.0,"Male","South","Software",19,12603,1.0,6122.13,48.58,"above 56"],["2023-06-06",60.0,"Male","East","Software",15,49462,7.0,36482.8,73.76,"above 56"],["2024-03-01",33.0,"Other","North","Software",19,28657,10.0,19831.04,69.2,"26-35"],["2025-05-03",50.0,"Female","West","Healthcare",16,35874,8.0,27653.38,77.08,"46-55"],["2025-09-25",56.0,"Female","North","Electronics",14,30609,7.0,21383.75,69.86,"above 56"],["2026-04-12",39.0,"Other","South","Electronics",10,19508,3.0,12835.44,65.8,"36-45"],["2023-08-03",39.0,"Other","West","Finance",2,5595,3.0,-4066.75,-72.69,"36-45"],["2026-01-16",44.0,"Male","North","Software",14,34642,1.0,25875.64,74.69,"36-45"],["2023-09-01",40.0,"Male","North","Finance",6,643,1.0,-308.86,-48.03,"36-45"],["2025-11-01",34.0,"Other","East","Software",12,31247,4.0,15657.31,50.11,"26-35"],["2024-02-11",42.0,"Other","West","Software",6,38798,7.0,31768.14,81.88,"36-45"],["2025-07-13",49.0,"Female","West","Electronics",8,3616,8.0,-5886.24,-162.78,"46-55"],["2025-04-14",28.0,"Female","North","Electronics",3,4505,7.0,1569.65,34.84,"26-35"],["2023-04-04",42.0,"Other","East","Finance",3,49273,1.0,42260.0,85.77,"36-45"],["2023-11-07",32.0,"Female","North","Electronics",12,46565,5.0,37886.0,81.36,"26-35"],["2024-11-13",53.0,"Male","South","Electronics",15,1728,5.0,-3849.08,-222.75,"46-55"],["2023-04-01",36.0,"Female","East","Electronics",6,2276,4.0,-6343.12,-278.7,"36-45"],["2023-05-26",42.0,"Other","West","Electronics",1,28094,3.0,19259.54,68.55,"36-45"],["2023-05-25",58.0,"Other","North","Healthcare",5,32602,5.0,18390.68,56.41,"above 56"],["2025-12-16",53.0,"Female","South","Finance",19,37470,6.0,29576.7,78.93,"46-55"],["2023-09-03",25.0,"Male","North","Finance",11,25893,10.0,12957.91,50.04,"18-25"],["2025-02-05",50.0,"Male","North","Software",15,47246,4.0,38434.08,81.35,"46-55"],["2023-06-24",33.0,"Other","West","Electronics",5,17227,4.0,7175.76,41.65,"26-35"],["2025-12-27",33.0,"Male","East","Software",10,8657,7.0,-712.97,-8.24,"26-35"],["2025-07-31",60.0,"Other","West","Electronics",10,46213,2.0,28826.84,62.38,"above 56"],["2025-03-07",43.0,"Other","South","Finance",15,10834,7.0,5139.58,47.44,"36-45"],["2023-10-20",24.0,"Female","South","Healthcare",19,3153,4.0,-5295.37,-167.95,"18-25"],["2025-11-21",42.0,"Other","West","Software",19,35356,3.0,26010.84,73.57,"36-45"],["2024-07-06",61.0,"Female","East","Healthcare",12,6783,10.0,3857.25,56.87,"above 56"],["2024-09-26",41.0,"Other","West","Healthcare",5,40799,1.0,30576.09,74.94,"36-45"],["2025-07-06",61.0,"Female","North","Finance",17,13632,1.0,3649.68,26.77,"above 56"],["2023-09-13",39.0,"Male","North","Retail",9,30095,5.0,15630.65,51.94,"36-45"],["2023-11-17",58.0,"Male","West","Electronics",18,5796,3.0,3439.6,59.34,"above 56"],["2025-11-18",53.0,"Female","South","Retail",7,20822,8.0,6237.18,29.95,"46-55"],["2025-10-28",56.0,"Male","South","Retail",5,14929,3.0,9191.13,61.57,"above 56"],["2024-07-09",27.0,"Female","West","Healthcare",1,23345,10.0,19750.95,84.6,"26-35"],["2023-05-14",63.0,"Female","East","Retail",3,20918,4.0,20167.0,96.41,"above 56"],["2024-08-24",63.0,"Other","West","Retail",4,44439,8.0,32278.25,72.63,"above 56"],["2025-10-06",40.0,"Male","West","Retail",8,31897,9.0,26141.15,81.95,"36-45"],["2023-03-31",32.0,"Male","West","Electronics",19,14474,4.0,4769.06,32.95,"26-35"],["2025-10-11",26.0,"Female","North","Software",3,30250,7.0,21764.0,71.95,"26-35"],["2025-11-11",57.0,"Other","West","Software",9,10573,4.0,8504.89,80.44,"above 56"],["2024-09-06",34.0,"Female","West","Retail",15,48541,10.0,31179.16,64.23,"26-35"],["2023-04-18",26.0,"Male","East","Retail",3,34108,1.0,25955.8,76.1,"26-35"],["2023-06-15",46.0,"Male","East","Software",11,33824,5.0,22341.96,66.05,"46-55"],["2024-08-03",64.0,"Female","West","Software",9,37361,6.0,25781.46,69.01,"above 56"],["2024-02-18",57.0,"Other","West","Electronics",11,26062,8.0,13783.26,52.89,"above 56"],["2026-03-20",30.0,"Other","West","Finance",8,42395,1.0,20783.4,49.02,"26-35"],["2023-02-02",34.0,"Other","West","Electronics",4,3158,7.0,-4356.8,-137.96,"26-35"],["2025-04-11",63.0,"Other","North","Finance",16,49258,5.0,28411.54,57.68,"above 56"],["2023-01-11",27.0,"Other","North","Retail",19,846,9.0,-9358.48,-1106.2,"26-35"],["2024-11-06",28.0,"Other","South","Retail",11,31267,2.0,24626.95,78.76,"26-35"],["2025-07-18",33.0,"Female","East","Healthcare",7,43746,7.0,36904.62,84.36,"26-35"],["2024-09-16",43.0,"Male","West","Software",11,11770,9.0,6741.4,57.28,"36-45"],["2024-05-27",42.0,"Female","West","Retail",5,15039,5.0,9025.35,60.01,"36-45"],["2023-03-24",52.0,"Other","East","Finance",4,31721,9.0,14206.02,44.78,"46-55"],["2023-01-15",31.0,"Other","East","Finance",6,25553,8.0,7193.33,28.15,"26-35"],["2023-11-19",23.0,"Other","North","Healthcare",8,34538,5.0,26253.96,76.01,"18-25"],["2025-06-23",61.0,"Female","North","Electronics",6,29180,10.0,20581.2,70.53,"above 56"],["2026-01-06",64.0,"Other","East","Electronics",9,43508,8.0,30863.64,70.94,"above 56"],["2026-04-08",47.0,"Female","West","Healthcare",17,13615,4.0,9348.6,68.66,"46-55"],["2023-06-04",29.0,"Male","East","Retail",11,34993,1.0,22524.7,64.37,"26-35"],["2024-09-07",37.0,"Female","South","Healthcare",17,21379,2.0,14861.04,69.51,"36-45"],["2024-06-19",42.0,"Other","North","Retail",19,48579,1.0,24112.14,49.63,"36-45"],["2025-06-10",68.0,"Male","South","Electronics",10,29519,4.0,19124.25,64.79,"above 56"],["2025-05-15",61.0,"Other","West","Retail",7,4484,9.0,-5936.52,-132.39,"above 56"],["2025-04-06",56.0,"Female","North","Healthcare",14,12306,10.0,2640.14,21.45,"above 56"],["2024-07-08",38.0,"Male","East","Retail",1,27429,2.0,10596.69,38.63,"36-45"],["2025-12-07",52.0,"Male","North","Retail",12,37219,7.0,19681.68,52.88,"46-55"],["2025-05-04",47.0,"Other","East","Finance",2,26805,9.0,11525.55,43.0,"46-55"],["2025-06-16",45.0,"Male","South","Electronics",8,40769,4.0,30123.41,73.89,"36-45"],["2024-11-17",67.0,"Male","West","Electronics",2,23721,2.0,21107.95,88.98,"above 56"],["2024-01-17",45.0,"Male","South","Healthcare",17,28126,1.0,14609.1,51.94,"36-45"],["2023-10-19",41.0,"Female","South","Retail",19,44454,1.0,21919.94,49.31,"36-45"],["2023-05-31",35.0,"Female","North","Finance",3,34691,3.0,22446.15,64.7,"26-35"],["2024-09-20",42.0,"Female","East","Software",16,11086,6.0,6193.08,55.86,"36-45"],["2024-08-24",60.0,"Other","South","Software",4,14741,5.0,7131.54,48.38,"above 56"],["2026-02-15",32.0,"Other","South","Finance",1,33989,5.0,17695.07,52.06,"26-35"],["2025-03-04",26.0,"Male","West","Finance",18,45579,6.0,34909.68,76.59,"26-35"],["2024-06-26",58.0,"Female","North","Retail",6,27442,7.0,11004.24,40.1,"above 56"],["2026-02-04",56.0,"Other","West","Retail",11,22688,2.0,19925.32,87.82,"above 56"],["2024-08-11",31.0,"Male","West","Electronics",6,14967,5.0,10290.99,68.76,"26-35"],["2025-01-31",20.0,"Male","West","Software",12,37591,10.0,27601.09,73.42,"18-25"],["2023-09-06",25.0,"Female","West","Finance",2,37540,7.0,32211.2,85.81,"18-25"],["2024-03-19",36.0,"Female","West","Retail",9,27086,5.0,15419.78,56.93,"36-45"],["2024-08-23",69.0,"Female","East","Healthcare",9,48016,2.0,34511.32,71.87,"above 56"],["2023-06-05",21.0,"Other","West","Software",7,27138,5.0,21018.1,77.45,"18-25"],["2025-03-29",62.0,"Male","North","Software",15,14697,2.0,3357.84,22.85,"above 56"],["2024-02-07",19.0,"Other","South","Healthcare",17,44810,7.0,41225.3,92.0,"18-25"],["2024-04-30",67.0,"Other","South","Healthcare",15,36476,10.0,22381.28,61.36,"above 56"],["2024-06-13",57.0,"Female","North","Healthcare",9,40493,3.0,21449.38,52.97,"above 56"],["2023-02-22",56.0,"Male","East","Software",15,49169,3.0,35617.65,72.44,"above 56"],["2025-04-23",26.0,"Male","East","Finance",6,21052,8.0,12788.0,60.74,"26-35"],["2024-09-05",23.0,"Male","North","Healthcare",4,20870,3.0,14411.7,69.05,"18-25"],["2025-02-05",69.0,"Other","North","Retail",9,35358,5.0,30713.78,86.87,"above 56"],["2023-08-12",21.0,"Male","South","Electronics",9,27004,10.0,15086.24,55.87,"18-25"],["2024-05-30",67.0,"Female","North","Software",7,30792,6.0,18274.72,59.35,"above 56"],["2025-07-15",64.0,"Other","South","Retail",2,16331,3.0,3284.11,20.11,"above 56"],["2025-12-22",68.0,"Female","West","Finance",9,11003,9.0,2153.55,19.57,"above 56"],["2025-10-21",42.0,"Other","East","Healthcare",8,22555,2.0,20539.0,91.06,"36-45"],["2024-05-05",69.0,"Male","South","Electronics",5,22284,10.0,12670.8,56.86,"above 56"],["2023-05-01",57.0,"Other","East","Retail",8,48594,7.0,40813.36,83.99,"above 56"],["2023-03-21",22.0,"Male","North","Electronics",18,28993,3.0,19627.89,67.7,"18-25"],["2023-04-11",22.0,"Other","South","Electronics",17,33942,10.0,32743.0,96.47,"18-25"],["2023-02-14",69.0,"Other","North","Healthcare",9,37662,8.0,17999.3,47.79,"above 56"],["2026-02-14",41.0,"Other","West","Retail",19,30053,10.0,17030.58,56.67,"36-45"],["2024-07-21",68.0,"Other","East","Finance",1,44851,3.0,30252.39,67.45,"above 56"],["2024-04-25",34.0,"Female","West","Retail",9,21474,7.0,12610.36,58.72,"26-35"],["2023-11-28",18.0,"Female","North","Healthcare",9,37143,5.0,20955.96,56.42,"above 56"],["2023-08-24",18.0,"Female","South","Retail",12,3684,7.0,2634.32,71.51,"above 56"],["2023-12-19",39.0,"Other","North","Retail",9,3173,5.0,830.16,26.16,"36-45"],["2025-01-13",42.0,"Male","West","Electronics",6,4452,6.0,3509.24,78.82,"36-45"],["2024-01-26",42.0,"Other","East","Retail",12,12041,1.0,6122.11,50.84,"36-45"],["2024-01-23",45.0,"Other","South","Finance",14,29213,4.0,19794.66,67.76,"36-45"],["2025-07-23",38.0,"Male","East","Retail",5,6841,4.0,2830.95,41.38,"36-45"],["2024-07-21",44.0,"Male","South","Retail",15,32977,7.0,24843.83,75.34,"36-45"],["2025-09-17",36.0,"Other","West","Finance",19,10099,4.0,-1036.8,-10.27,"36-45"],["2024-09-08",24.0,"Female","North","Retail",16,20392,9.0,13290.48,65.17,"18-25"],["2025-03-05",53.0,"Female","West","Electronics",16,23780,4.0,10966.8,46.12,"46-55"],["2025-12-15",21.0,"Other","South","Healthcare",3,34967,9.0,28991.63,82.91,"18-25"],["2025-04-02",25.0,"Other","West","Healthcare",9,36302,9.0,15642.28,43.09,"18-25"],["2024-05-14",39.0,"Female","North","Retail",4,30729,7.0,12644.14,41.15,"36-45"],["2025-03-05",26.0,"Other","South","Retail",15,15168,3.0,4878.64,32.16,"26-35"],["2026-01-20",39.0,"Female","West","Finance",1,8444,3.0,-1300.52,-15.4,"36-45"],["2023-08-25",36.0,"Other","West","Electronics",14,4427,3.0,-5440.45,-122.89,"36-45"],["2025-11-27",23.0,"Male","North","Retail",17,4400,5.0,-103.0,-2.34,"18-25"],["2025-03-23",63.0,"Other","West","Software",3,24224,6.0,15560.72,64.24,"above 56"],["2024-11-20",37.0,"Other","West","Retail",8,48367,3.0,35559.64,73.52,"36-45"],["2023-10-29",42.0,"Other","East","Retail",6,43207,5.0,22559.41,52.21,"36-45"],["2025-04-29",67.0,"Other","North","Finance",4,4333,1.0,-3868.63,-89.28,"above 56"],["2024-05-09",58.0,"Other","East","Electronics",14,33379,7.0,27326.1,81.87,"above 56"],["2025-02-24",30.0,"Other","West","Retail",6,12222,5.0,-1879.58,-15.38,"26-35"],["2025-08-26",34.0,"Other","East","Retail",18,10202,2.0,7572.86,74.23,"26-35"],["2025-06-05",42.0,"Female","East","Healthcare",2,12455,2.0,3331.6,26.75,"36-45"],["2025-12-22",30.0,"Other","West","Finance",3,39787,3.0,15140.81,38.05,"26-35"],["2023-03-11",52.0,"Other","West","Healthcare",13,5579,9.0,1770.04,31.73,"46-55"],["2024-02-11",25.0,"Female","West","Retail",2,1395,9.0,-7634.45,-547.27,"18-25"],["2024-07-06",27.0,"Male","West","Electronics",16,881,4.0,-9018.35,-1023.65,"26-35"],["2025-03-30",48.0,"Male","North","Healthcare",4,9776,8.0,7506.12,76.78,"46-55"],["2024-07-31",32.0,"Other","North","Software",14,17857,10.0,9375.04,52.5,"26-35"],["2025-07-30",42.0,"Male","West","Software",15,4822,3.0,369.18,7.66,"36-45"],["2025-08-07",23.0,"Other","South","Electronics",13,10897,7.0,1729.33,15.87,"18-25"],["2023-02-02",24.0,"Male","North","Finance",2,13427,2.0,4196.92,31.26,"18-25"],["2024-01-07",45.0,"Female","East","Retail",8,38919,7.0,25515.58,65.56,"36-45"],["2025-06-19",67.0,"Male","East","Healthcare",3,43578,4.0,36911.66,84.7,"above 56"],["2025-11-19",40.0,"Other","South","Finance",13,38354,4.0,21488.34,56.03,"36-45"],["2023-03-18",27.0,"Female","East","Finance",5,2566,6.0,-3107.16,-121.09,"26-35"],["2025-10-21",31.0,"Male","East","Software",18,37506,2.0,17408.9,46.42,"26-35"],["2025-10-23",65.0,"Other","East","Electronics",10,41518,7.0,24839.04,59.83,"above 56"],["2023-11-26",58.0,"Female","South","Healthcare",17,2073,3.0,1098.78,53.0,"above 56"],["2025-09-17",33.0,"Other","North","Finance",6,37664,1.0,15535.68,41.25,"26-35"],["2023-04-30",43.0,"Other","West","Software",9,3851,1.0,680.66,17.67,"36-45"],["2024-03-13",23.0,"Other","West","Finance",14,28710,4.0,22743.8,79.22,"18-25"],["2025-07-28",54.0,"Other","East","Electronics",3,19345,6.0,13033.75,67.38,"46-55"],["2025-12-12",43.0,"Other","East","Healthcare",2,46466,6.0,38738.44,83.37,"36-45"],["2025-02-17",41.0,"Other","South","Finance",4,44009,6.0,35599.0,80.89,"36-45"],["2026-03-06",32.0,"Other","West","Retail",16,48992,8.0,28464.08,58.1,"26-35"],["2023-10-23",23.0,"Female","East","Finance",19,2259,7.0,541.05,23.95,"18-25"],["2023-11-20",42.0,"Female","South","Healthcare",9,49332,5.0,34442.52,69.82,"36-45"],["2024-09-19",31.0,"Female","North","Finance",2,4039,7.0,-1122.92,-27.8,"26-35"],["2025-04-19",41.0,"Male","West","Finance",6,49283,6.0,30196.74,61.27,"36-45"],["2024-09-16",51.0,"Male","West","Finance",15,34807,9.0,25361.81,72.86,"46-55"],["2025-02-23",61.0,"Female","West","Healthcare",1,14397,5.0,1468.87,10.2,"above 56"],["2024-08-05",51.0,"Other","West","Software",14,45205,8.0,27258.05,60.3,"46-55"],["2025-02-14",25.0,"Female","South","Software",18,4200,5.0,2363.0,56.26,"18-25"],["2025-11-06",40.0,"Other","North","Retail",3,48149,3.0,26873.3,55.81,"36-45"],["2025-02-03",22.0,"Other","North","Electronics",4,39911,6.0,24357.8,61.03,"18-25"],["2025-10-23",22.0,"Other","East","Software",13,43803,5.0,32642.91,74.52,"18-25"],["2025-08-20",38.0,"Other","East","Retail",3,31756,10.0,20100.08,63.3,"36-45"],["2025-11-19",67.0,"Male","East","Electronics",2,20273,2.0,14471.48,71.38,"above 56"],["2023-11-30",51.0,"Male","East","Electronics",17,7773,2.0,-3384.74,-43.54,"46-55"],["2023-07-11",56.0,"Female","East","Software",10,47939,3.0,42241.05,88.11,"above 56"],["2025-03-03",68.0,"Male","North","Finance",18,31801,8.0,25707.84,80.84,"above 56"],["2026-02-05",18.0,"Other","West","Retail",3,18100,4.0,9834.0,54.33,"above 56"],["2023-08-28",65.0,"Other","West","Finance",9,32594,9.0,15781.74,48.42,"above 56"],["2023-08-07",39.0,"Other","South","Electronics",8,37875,4.0,32704.5,86.35,"36-45"],["2024-12-20",42.0,"Female","South","Electronics",15,930,8.0,-2428.7,-261.15,"36-45"],["2024-10-06",47.0,"Male","South","Healthcare",5,33605,7.0,30371.0,90.38,"46-55"],["2023-05-30",19.0,"Other","East","Electronics",16,30417,5.0,26015.13,85.53,"18-25"],["2024-10-29",42.0,"Other","North","Software",5,31789,1.0,14283.63,44.93,"36-45"],["2024-02-16",65.0,"Male","North","Electronics",13,37469,2.0,28482.41,76.02,"above 56"],["2023-03-27",55.0,"Male","South","Healthcare",2,4635,5.0,-4934.1,-106.45,"46-55"],["2025-03-04",25.0,"Female","South","Software",13,6676,9.0,2187.28,32.76,"18-25"],["2025-05-27",44.0,"Male","North","Electronics",9,36080,10.0,19846.0,55.01,"36-45"],["2025-08-21",35.0,"Other","West","Healthcare",3,42349,4.0,24101.3,56.91,"26-35"],["2023-01-06",50.0,"Female","East","Retail",15,32952,6.0,15703.24,47.65,"46-55"],["2025-06-15",44.0,"Male","North","Electronics",16,7681,8.0,-2279.11,-29.67,"36-45"],["2023-10-01",55.0,"Female","West","Finance",14,39131,3.0,23093.56,59.02,"46-55"],["2024-05-02",41.0,"Other","West","Finance",18,42678,5.0,26950.08,63.15,"36-45"],["2024-12-07",28.0,"Other","East","Software",16,37964,9.0,20602.72,54.27,"26-35"],["2025-09-06",66.0,"Other","North","Electronics",1,43625,6.0,25088.0,57.51,"above 56"],["2025-09-09",53.0,"Other","South","Software",15,8088,5.0,-32.52,-0.4,"46-55"],["2025-04-24",55.0,"Other","North","Electronics",7,7997,6.0,2864.96,35.83,"46-55"],["2025-12-12",69.0,"Female","West","Retail",14,12216,5.0,-1030.44,-8.44,"above 56"],["2024-04-21",41.0,"Other","South","Electronics",7,12022,4.0,4030.14,33.52,"36-45"],["2023-09-09",46.0,"Other","North","Electronics",17,31451,4.0,23072.94,73.36,"46-55"],["2024-03-10",18.0,"Female","East","Electronics",18,8307,4.0,4358.55,52.47,"above 56"],["2025-01-15",20.0,"Male","West","Finance",5,43557,7.0,20188.34,46.35,"18-25"],["2023-10-19",39.0,"Female","North","Software",10,16766,5.0,10949.86,65.31,"36-45"],["2024-09-18",49.0,"Male","West","Electronics",3,43817,9.0,37814.49,86.3,"46-55"],["2026-04-08",42.0,"Male","North","Healthcare",3,46293,9.0,31631.89,68.33,"36-45"],["2024-12-25",54.0,"Male","North","Finance",15,3908,5.0,-942.2,-24.11,"46-55"],["2025-02-06",42.0,"Other","West","Electronics",14,27550,5.0,15199.0,55.17,"36-45"],["2024-08-14",19.0,"Other","North","Software",8,19171,4.0,10372.15,54.1,"18-25"],["2023-10-24",28.0,"Male","South","Finance",13,23018,7.0,10684.42,46.42,"26-35"],["2024-06-04",42.0,"Other","East","Healthcare",17,18303,7.0,9362.95,51.16,"36-45"],["2023-03-07",28.0,"Other","East","Electronics",15,27916,5.0,18451.16,66.1,"26-35"],["2024-06-16",41.0,"Male","East","Finance",6,32020,2.0,27010.4,84.35,"36-45"],["2023-09-16",25.0,"Other","West","Finance",8,5623,5.0,-4148.52,-73.78,"18-25"],["2024-11-17",30.0,"Male","East","Retail",14,3297,1.0,54.99,1.67,"26-35"],["2024-05-06",69.0,"Other","North","Retail",19,23629,1.0,13362.14,56.55,"above 56"],["2023-03-19",28.0,"Male","North","Retail",9,43100,3.0,25121.0,58.29,"26-35"],["2025-02-15",54.0,"Male","South","Electronics",12,33621,1.0,25306.85,75.27,"46-55"],["2026-03-09",67.0,"Other","East","Retail",13,44483,2.0,33990.68,76.41,"above 56"],["2023-03-06",53.0,"Male","East","Electronics",18,39583,5.0,25920.78,65.48,"46-55"],["2023-01-11",64.0,"Female","North","Finance",9,34585,7.0,18420.95,53.26,"above 56"],["2025-05-23",26.0,"Female","West","Healthcare",17,24530,3.0,20954.7,85.42,"26-35"],["2024-09-24",55.0,"Male","West","Software",1,24875,6.0,17900.0,71.96,"46-55"],["2025-05-31",36.0,"Male","East","Retail",18,24219,10.0,13834.92,57.12,"36-45"],["2024-02-22",25.0,"Other","West","Healthcare",1,22397,5.0,19046.03,85.04,"18-25"],["2023-02-01",34.0,"Male","West","Healthcare",4,16033,5.0,8235.44,51.37,"26-35"],["2025-06-26",59.0,"Female","East","Electronics",11,36751,10.0,28248.88,76.87,"above 56"],["2025-11-21",61.0,"Female","East","Software",13,22406,10.0,11532.1,51.47,"above 56"],["2025-09-23",51.0,"Other","West","Healthcare",6,3176,7.0,-6396.88,-201.41,"46-55"],["2025-03-12",53.0,"Male","East","Electronics",11,10515,1.0,7663.25,72.88,"46-55"],["2023-09-23",57.0,"Female","South","Healthcare",11,15250,5.0,4470.5,29.31,"above 56"],["2025-01-03",55.0,"Male","North","Healthcare",12,34915,2.0,30293.35,86.76,"46-55"],["2025-04-26",52.0,"Female","East","Healthcare",5,35432,3.0,23898.64,67.45,"46-55"],["2023-03-08",36.0,"Female","West","Electronics",3,15630,8.0,7735.7,49.49,"36-45"],["2023-07-23",30.0,"Other","West","Finance",5,5237,5.0,1371.16,26.18,"26-35"],["2026-02-19",52.0,"Male","West","Software",18,25366,3.0,12531.22,49.4,"46-55"],["2024-04-27",40.0,"Male","West","Electronics",2,15337,1.0,14784.26,96.4,"36-45"],["2024-12-04",26.0,"Male","East","Finance",16,5557,8.0,2380.47,42.84,"26-35"],["2026-01-10",19.0,"Female","North","Finance",10,6203,2.0,595.04,9.59,"18-25"],["2023-05-14",48.0,"Female","North","Software",15,9486,8.0,4898.62,51.64,"46-55"],["2024-03-19",64.0,"Other","East","Software",11,4439,7.0,79.88,1.8,"above 56"],["2023-02-20",48.0,"Other","East","Electronics",5,13932,5.0,10704.24,76.83,"46-55"],["2026-03-12",23.0,"Other","West","Electronics",5,44276,1.0,38175.12,86.22,"18-25"],["2026-02-18",47.0,"Female","South","Electronics",15,5044,5.0,-4425.0,-87.73,"46-55"],["2025-05-30",63.0,"Male","East","Finance",7,10908,5.0,8508.56,78.0,"above 56"],["2025-02-12",65.0,"Male","West","Finance",1,11609,5.0,7852.73,67.64,"above 56"],["2025-05-31",23.0,"Female","North","Healthcare",5,36568,5.0,32419.6,88.66,"18-25"],["2023-05-05",47.0,"Other","South","Electronics",2,40668,1.0,31443.92,77.32,"46-55"],["2023-05-05",42.0,"Male","North","Finance",10,31685,1.0,12941.1,40.84,"36-45"],["2023-01-23",69.0,"Female","East","Retail",2,48803,10.0,28128.98,57.64,"above 56"],["2024-01-24",45.0,"Female","West","Finance",3,42766,7.0,27212.12,63.63,"36-45"],["2024-07-17",54.0,"Male","South","Electronics",15,38786,2.0,26722.98,68.9,"46-55"],["2025-06-25",21.0,"Other","North","Healthcare",12,22169,1.0,17445.62,78.69,"18-25"],["2025-11-06",53.0,"Male","South","Retail",12,30974,5.0,10682.36,34.49,"46-55"],["2024-04-25",38.0,"Male","South","Healthcare",10,48462,2.0,27664.44,57.08,"36-45"],["2024-09-19",28.0,"Female","East","Software",4,47372,5.0,34122.92,72.03,"26-35"],["2024-10-21",20.0,"Male","North","Software",10,24830,5.0,14322.0,57.68,"18-25"],["2025-02-25",42.0,"Female","South","Electronics",1,17065,4.0,3602.45,21.11,"36-45"],["2025-07-29",32.0,"Other","North","Healthcare",14,13295,9.0,7821.2,58.83,"26-35"],["2024-12-23",30.0,"Other","East","Electronics",7,24813,10.0,7982.45,32.17,"26-35"],["2025-10-21",60.0,"Male","North","Finance",15,12767,6.0,5621.3,44.03,"above 56"],["2025-10-14",42.0,"Male","East","Electronics",18,24165,6.0,9838.2,40.71,"36-45"],["2025-12-05",42.0,"Male","West","Retail",17,1246,8.0,927.78,74.46,"36-45"],["2023-10-05",43.0,"Female","East","Software",6,43023,4.0,29729.93,69.1,"36-45"],["2025-02-23",20.0,"Female","South","Electronics",4,42617,9.0,25537.73,59.92,"18-25"],["2023-06-24",51.0,"Other","West","Electronics",3,18891,2.0,16944.0,89.69,"46-55"],["2024-04-11",59.0,"Other","East","Retail",10,1801,8.0,-2047.28,-113.67,"above 56"],["2025-10-04",31.0,"Male","West","Software",12,44654,6.0,29344.52,65.72,"26-35"],["2025-10-10",56.0,"Male","East","Software",1,10926,7.0,5471.84,50.08,"above 56"],["2024-08-24",63.0,"Other","North","Finance",2,42779,10.0,25623.99,59.9,"above 56"],["2024-08-23",31.0,"Female","East","Retail",17,27769,9.0,9704.85,34.95,"26-35"],["2024-07-05",32.0,"Other","North","Finance",9,16876,1.0,7842.04,46.47,"26-35"],["2025-09-01",43.0,"Male","North","Software",1,36586,4.0,26475.54,72.37,"36-45"],["2025-11-29",54.0,"Other","West","Electronics",12,18471,10.0,5305.25,28.72,"46-55"],["2024-03-11",27.0,"Male","East","Healthcare",13,14008,5.0,7232.64,51.63,"26-35"],["2025-01-23",59.0,"Female","East","Retail",5,6046,4.0,-2632.52,-43.54,"above 56"],["2025-02-09",27.0,"Male","East","Electronics",2,36898,6.0,24847.24,67.34,"26-35"],["2024-05-17",27.0,"Female","North","Retail",4,46572,4.0,42791.0,91.88,"26-35"],["2023-07-29",23.0,"Other","East","Software",10,34871,3.0,17161.67,49.21,"18-25"],["2024-11-27",41.0,"Other","East","Retail",17,5914,9.0,648.66,10.97,"36-45"],["2024-10-03",40.0,"Other","West","Software",10,45563,9.0,35402.33,77.7,"36-45"],["2024-05-09",20.0,"Female","East","Software",16,20573,10.0,12159.78,59.11,"18-25"],["2023-08-31",37.0,"Female","North","Finance",5,48917,8.0,37133.94,75.91,"36-45"],["2025-11-20",23.0,"Female","West","Software",7,37636,10.0,26188.44,69.58,"18-25"],["2023-11-26",57.0,"Other","North","Healthcare",15,29783,5.0,16772.74,56.32,"above 56"],["2025-01-22",27.0,"Female","West","Electronics",19,28568,9.0,19938.04,69.79,"26-35"],["2025-04-16",25.0,"Other","South","Retail",11,15213,4.0,8172.57,53.72,"18-25"],["2023-10-29",56.0,"Male","East","Software",9,29941,1.0,15935.39,53.22,"above 56"],["2024-09-04",57.0,"Male","South","Healthcare",5,36683,5.0,23428.1,63.87,"above 56"],["2023-03-22",62.0,"Female","North","Healthcare",18,13858,8.0,2861.02,20.65,"above 56"],["2025-12-29",39.0,"Female","North","Healthcare",4,25978,3.0,22054.08,84.9,"36-45"],["2024-11-10",53.0,"Male","South","Healthcare",16,39131,6.0,31507.97,80.52,"46-55"],["2023-08-07",44.0,"Other","South","Software",19,500,5.0,-2769.0,-553.8,"36-45"],["2023-12-19",31.0,"Male","North","Retail",12,9649,8.0,1105.63,11.46,"26-35"],["2025-03-26",21.0,"Female","East","Software",10,25488,9.0,12201.48,47.87,"18-25"],["2025-06-26",27.0,"Other","East","Finance",7,4765,9.0,-2405.15,-50.48,"26-35"],["2025-05-15",21.0,"Male","East","Electronics",19,49437,6.0,31970.49,64.67,"18-25"],["2025-03-16",60.0,"Other","West","Electronics",4,26207,7.0,12340.62,47.09,"above 56"],["2023-11-07",54.0,"Male","West","Healthcare",10,24929,6.0,22165.55,88.91,"46-55"],["2025-07-11",63.0,"Other","North","Finance",6,7947,5.0,2302.77,28.98,"above 56"],["2025-09-07",53.0,"Other","South","Electronics",2,49851,4.0,33998.78,68.2,"46-55"],["2026-02-19",54.0,"Male","East","Healthcare",2,5186,7.0,-2548.0,-49.13,"46-55"],["2025-04-30",42.0,"Male","North","Retail",19,14171,10.0,1241.25,8.76,"36-45"],["2023-04-23",40.0,"Male","South","Electronics",2,15568,3.0,2128.36,13.67,"36-45"],["2024-10-03",42.0,"Male","North","Electronics",8,1797,5.0,727.81,40.5,"36-45"],["2025-04-22",60.0,"Male","West","Software",18,2358,9.0,-6363.4,-269.86,"above 56"],["2025-10-20",51.0,"Other","East","Electronics",11,41573,10.0,18391.99,44.24,"46-55"],["2023-07-22",33.0,"Female","South","Healthcare",4,21907,10.0,10300.88,47.02,"26-35"],["2024-07-14",40.0,"Other","South","Software",19,5441,8.0,-3293.17,-60.53,"36-45"],["2025-10-23",41.0,"Female","East","Retail",11,6583,7.0,-1781.15,-27.06,"36-45"],["2025-09-26",48.0,"Other","West","Finance",18,15464,5.0,7634.16,49.37,"46-55"],["2023-06-09",39.0,"Other","North","Healthcare",5,18946,5.0,9246.34,48.8,"36-45"],["2024-03-09",40.0,"Female","South","Retail",8,4530,10.0,958.3,21.15,"36-45"],["2024-11-16",38.0,"Female","West","Software",8,48392,2.0,23875.48,49.34,"36-45"],["2025-01-31",54.0,"Other","West","Software",7,19655,1.0,9030.25,45.94,"46-55"],["2025-06-21",53.0,"Male","South","Electronics",18,31965,8.0,25597.9,80.08,"46-55"],["2024-10-24",60.0,"Male","West","Healthcare",19,39694,4.0,30310.32,76.36,"above 56"],["2025-07-02",42.0,"Female","West","Software",18,26351,7.0,7672.17,29.12,"36-45"],["2024-06-27",51.0,"Female","South","Electronics",2,30394,1.0,19791.26,65.12,"46-55"],["2025-10-18",36.0,"Other","North","Retail",9,15244,5.0,7191.08,47.17,"36-45"],["2023-11-11",61.0,"Male","West","Electronics",18,21847,2.0,10482.48,47.98,"above 56"],["2024-02-27",42.0,"Other","West","Finance",2,33145,8.0,28478.55,85.92,"36-45"],["2025-01-20",39.0,"Female","North","Healthcare",5,5246,2.0,-2526.72,-48.16,"36-45"],["2024-01-20",31.0,"Male","East","Software",18,49955,9.0,22419.55,44.88,"26-35"],["2025-03-10",32.0,"Female","West","Healthcare",1,33528,5.0,26155.6,78.01,"26-35"],["2025-03-02",61.0,"Female","North","Retail",17,1187,1.0,-5145.1,-433.45,"above 56"],["2025-10-28",42.0,"Female","North","Software",14,21658,1.0,10989.7,50.74,"36-45"],["2026-03-28",53.0,"Other","West","Healthcare",8,7038,7.0,754.3,10.72,"46-55"],["2024-04-28",20.0,"Male","East","Healthcare",16,12329,1.0,5759.75,46.72,"18-25"],["2023-09-08",18.0,"Female","East","Retail",4,9782,6.0,7603.06,77.73,"above 56"],["2025-08-02",65.0,"Other","South","Software",5,28139,1.0,15261.08,54.23,"above 56"],["2024-02-09",28.0,"Other","West","Finance",1,13175,3.0,3272.0,24.83,"26-35"],["2023-07-12",67.0,"Other","East","Finance",13,49460,4.0,36567.8,73.93,"above 56"],["2025-04-07",62.0,"Male","East","Retail",9,27384,3.0,9406.76,34.35,"above 56"],["2023-07-18",40.0,"Male","West","Healthcare",18,29146,10.0,22298.72,76.51,"36-45"],["2023-06-12",50.0,"Female","North","Finance",17,18711,3.0,5070.25,27.1,"46-55"],["2024-08-12",65.0,"Male","North","Software",18,1532,5.0,296.24,19.34,"above 56"],["2024-01-01",21.0,"Other","West","Retail",11,49703,7.0,38288.43,77.03,"18-25"],["2025-11-18",34.0,"Other","West","Retail",17,15542,7.0,3222.62,20.73,"26-35"],["2025-10-14",48.0,"Male","North","Retail",19,30234,8.0,20790.26,68.76,"46-55"],["2023-10-31",47.0,"Female","East","Retail",9,46321,9.0,34227.74,73.89,"46-55"],["2023-05-29",33.0,"Male","East","Healthcare",3,24579,6.0,20927.1,85.14,"26-35"],["2025-09-09",42.0,"Male","North","Software",15,6239,3.0,5360.05,85.91,"36-45"],["2023-03-29",40.0,"Male","West","Software",11,19154,5.0,18099.38,94.49,"36-45"],["2024-06-10",42.0,"Female","North","Software",19,7900,6.0,-3595.0,-45.51,"36-45"],["2026-03-15",60.0,"Female","North","Retail",9,45273,8.0,39608.7,87.49,"above 56"],["2023-05-16",21.0,"Female","South","Healthcare",11,9107,5.0,4068.9,44.68,"18-25"],["2023-11-14",62.0,"Female","South","Finance",8,31868,10.0,19923.04,62.52,"above 56"],["2023-11-24",26.0,"Male","West","Software",10,42344,6.0,19254.92,45.47,"26-35"],["2023-02-05",62.0,"Female","East","Retail",11,42779,8.0,25588.57,59.82,"above 56"],["2024-03-24",63.0,"Other","West","Electronics",12,42420,3.0,29309.2,69.09,"above 56"],["2024-02-10",32.0,"Other","West","Finance",6,14166,2.0,4754.02,33.56,"26-35"],["2026-03-28",66.0,"Other","North","Healthcare",14,3709,7.0,-3920.62,-105.71,"above 56"],["2026-01-02",63.0,"Male","North","Electronics",7,39058,8.0,23145.24,59.26,"above 56"],["2024-11-28",50.0,"Female","South","Finance",8,42443,2.0,21894.66,51.59,"46-55"],["2025-05-30",62.0,"Other","North","Healthcare",11,8752,5.0,-2319.04,-26.5,"above 56"],["2023-05-18",42.0,"Male","East","Finance",7,38405,8.0,29947.95,77.98,"36-45"],["2024-10-03",62.0,"Other","West","Retail",15,30741,2.0,18961.52,61.68,"above 56"],["2025-07-05",31.0,"Male","West","Electronics",3,33540,4.0,22660.8,67.56,"26-35"],["2023-01-17",34.0,"Female","West","Electronics",15,43676,5.0,18300.12,41.9,"26-35"],["2024-10-17",35.0,"Female","East","Retail",10,47825,1.0,37493.25,78.4,"26-35"],["2024-05-09",33.0,"Female","North","Electronics",8,47434,8.0,29623.88,62.45,"26-35"],["2024-09-25",42.0,"Female","North","Finance",2,25353,8.0,17862.4,70.45,"36-45"],["2025-11-25",38.0,"Male","West","Software",10,27654,6.0,21985.14,79.5,"36-45"],["2025-08-20",54.0,"Other","West","Software",3,46351,9.0,30021.72,64.77,"46-55"],["2025-11-09",57.0,"Female","North","Healthcare",3,17049,5.0,6992.14,41.01,"above 56"],["2025-12-29",55.0,"Female","East","Software",10,37316,4.0,21171.92,56.74,"46-55"],["2025-11-21",44.0,"Male","North","Healthcare",8,27646,8.0,21398.78,77.4,"36-45"],["2025-04-11",37.0,"Female","South","Finance",7,11348,6.0,5027.2,44.3,"36-45"],["2025-08-18",69.0,"Other","East","Finance",8,30417,1.0,17196.94,56.54,"above 56"],["2025-11-11",29.0,"Male","North","Healthcare",12,3604,3.0,-791.2,-21.95,"26-35"],["2023-01-02",47.0,"Male","East","Software",18,18108,6.0,17556.0,96.95,"46-55"],["2023-06-13",58.0,"Other","East","Electronics",5,12724,9.0,1704.68,13.4,"above 56"],["2023-05-19",37.0,"Male","East","Electronics",17,36150,2.0,21981.0,60.8,"36-45"],["2024-09-26",44.0,"Female","North","Retail",15,48501,5.0,45173.97,93.14,"36-45"],["2025-10-27",39.0,"Female","West","Electronics",4,19360,5.0,9767.2,50.45,"36-45"],["2026-04-13",64.0,"Male","South","Healthcare",15,14841,10.0,11850.72,79.85,"above 56"],["2025-04-05",63.0,"Female","North","Electronics",11,33541,9.0,22158.85,66.06,"above 56"],["2024-09-21",42.0,"Female","North","Finance",3,23123,8.0,11066.56,47.86,"36-45"],["2025-05-28",49.0,"Female","South","Electronics",15,17733,9.0,10473.44,59.06,"46-55"],["2024-06-03",28.0,"Male","West","Software",19,29885,10.0,22754.45,76.14,"26-35"],["2023-11-16",39.0,"Male","East","Finance",12,28988,9.0,24311.32,83.87,"36-45"],["2023-08-10",38.0,"Other","North","Software",19,25923,3.0,16461.31,63.5,"36-45"],["2025-07-15",55.0,"Male","North","Electronics",12,5347,2.0,360.66,6.75,"46-55"],["2023-04-17",33.0,"Other","East","Electronics",17,39061,5.0,21157.04,54.16,"26-35"],["2026-04-12",36.0,"Female","East","Electronics",8,43414,8.0,30449.08,70.14,"36-45"],["2025-12-04",35.0,"Female","North","Software",19,24861,7.0,11164.53,44.91,"26-35"],["2024-12-13",33.0,"Male","West","Healthcare",9,41124,7.0,27552.28,67.0,"26-35"],["2025-08-10",47.0,"Male","East","Finance",5,5484,5.0,2492.84,45.46,"46-55"],["2024-06-27",26.0,"Female","East","Retail",10,28425,6.0,17099.0,60.15,"26-35"],["2025-05-24",42.0,"Male","North","Electronics",2,16156,2.0,11362.52,70.33,"36-45"],["2023-03-30",45.0,"Other","North","Finance",15,47102,8.0,37534.72,79.69,"36-45"],["2024-07-23",20.0,"Other","South","Software",9,14629,8.0,7424.72,50.75,"18-25"],["2025-09-22",23.0,"Other","South","Electronics",17,4383,5.0,2495.93,56.95,"18-25"],["2023-12-02",26.0,"Male","East","Software",12,39980,9.0,17651.8,44.15,"26-35"],["2026-01-03",33.0,"Other","South","Software",18,8836,5.0,358.12,4.05,"26-35"],["2023-08-23",31.0,"Female","West","Retail",13,5520,8.0,-3839.4,-69.55,"26-35"],["2023-11-01",56.0,"Male","West","Software",6,19098,8.0,8187.44,42.87,"above 56"],["2024-04-20",40.0,"Male","East","Electronics",17,35895,5.0,26245.05,73.12,"36-45"],["2023-02-19",57.0,"Other","North","Finance",9,30307,10.0,12366.62,40.8,"above 56"],["2025-11-19",64.0,"Male","South","Software",15,32975,3.0,20936.5,63.49,"above 56"],["2025-10-29",66.0,"Female","North","Finance",17,16918,10.0,9223.5,54.52,"above 56"],["2025-09-30",23.0,"Female","West","Electronics",17,35570,4.0,27306.6,76.77,"18-25"],["2024-03-12",25.0,"Other","West","Retail",1,41807,4.0,22129.97,52.93,"18-25"],["2025-10-01",48.0,"Other","North","Software",12,43862,3.0,27526.78,62.76,"46-55"],["2025-05-01",42.0,"Other","North","Healthcare",10,4970,10.0,-4867.5,-97.94,"36-45"],["2025-08-21",36.0,"Other","North","Healthcare",1,17266,6.0,10963.76,63.5,"36-45"],["2023-08-19",30.0,"Male","North","Retail",3,23012,5.0,20486.92,89.03,"26-35"],["2025-12-09",57.0,"Male","South","Electronics",8,2765,1.0,-7949.55,-287.51,"above 56"],["2024-05-12",32.0,"Female","East","Software",9,9638,4.0,-2896.44,-30.05,"26-35"],["2024-02-23",68.0,"Male","East","Healthcare",5,38075,2.0,19693.0,51.72,"above 56"],["2024-09-16",37.0,"Other","North","Electronics",17,11562,5.0,-83.56,-0.72,"36-45"],["2024-12-10",19.0,"Female","North","Retail",17,2895,10.0,-4264.0,-147.29,"18-25"],["2023-03-22",25.0,"Female","West","Finance",12,20056,5.0,8468.08,42.22,"18-25"],["2024-11-06",52.0,"Female","North","Software",11,36896,10.0,20930.16,56.73,"46-55"],["2024-06-22",25.0,"Other","North","Electronics",2,43315,5.0,28495.8,65.79,"18-25"],["2024-03-05",36.0,"Male","North","Healthcare",15,25824,6.0,16866.32,65.31,"36-45"],["2025-02-24",19.0,"Other","North","Software",17,29989,8.0,15032.74,50.13,"18-25"],["2024-02-29",52.0,"Male","West","Finance",7,42796,7.0,24998.12,58.41,"46-55"],["2026-01-14",56.0,"Male","West","Healthcare",6,826,4.0,-592.68,-71.75,"above 56"],["2024-12-09",60.0,"Other","West","Software",12,47454,1.0,27988.48,58.98,"above 56"],["2024-12-04",66.0,"Other","South","Finance",6,22301,5.0,7381.61,33.1,"above 56"],["2025-02-10",42.0,"Male","West","Healthcare",12,14393,3.0,11022.14,76.58,"36-45"],["2024-10-08",37.0,"Male","West","Retail",7,34975,4.0,20110.75,57.5,"36-45"],["2023-03-28",24.0,"Male","South","Finance",8,42987,7.0,29225.08,67.99,"18-25"],["2024-08-12",64.0,"Female","South","Healthcare",7,15919,10.0,6972.92,43.8,"above 56"],["2025-05-01",39.0,"Female","South","Finance",3,47158,10.0,37074.04,78.62,"36-45"],["2023-04-13",45.0,"Other","West","Software",8,25558,5.0,12477.02,48.82,"36-45"],["2023-02-27",68.0,"Other","South","Retail",8,47245,8.0,45728.55,96.79,"above 56"],["2023-07-28",62.0,"Other","South","Healthcare",5,45609,5.0,27974.02,61.33,"above 56"],["2025-11-26",58.0,"Female","North","Software",18,22860,10.0,5588.2,24.45,"above 56"],["2026-01-04",29.0,"Female","East","Healthcare",12,27419,5.0,11606.54,42.33,"26-35"],["2023-07-31",25.0,"Male","West","Healthcare",12,32765,5.0,23977.55,73.18,"18-25"],["2025-05-16",48.0,"Male","South","Healthcare",18,8285,9.0,-352.9,-4.26,"46-55"],["2024-03-20",24.0,"Other","East","Electronics",5,5011,1.0,-2788.0,-55.64,"18-25"],["2023-05-12",19.0,"Male","South","Software",6,49371,1.0,28483.41,57.69,"18-25"],["2024-05-24",50.0,"Male","West","Finance",14,27519,5.0,19492.44,70.83,"46-55"],["2024-10-27",36.0,"Female","East","Finance",16,1974,8.0,-3768.98,-190.93,"36-45"],["2024-04-21",67.0,"Other","West","Finance",9,41959,10.0,34985.46,83.38,"above 56"],["2024-10-04",42.0,"Other","East","Electronics",5,14806,3.0,7284.92,49.2,"36-45"],["2024-11-04",61.0,"Other","East","Healthcare",8,10539,7.0,4840.44,45.93,"above 56"],["2023-04-16",28.0,"Other","North","Healthcare",13,1785,8.0,-8074.4,-452.35,"26-35"],["2023-04-18",59.0,"Female","North","Finance",11,10719,8.0,1609.15,15.01,"above 56"],["2025-04-11",53.0,"Other","East","Electronics",1,23738,9.0,16209.16,68.28,"46-55"],["2025-11-15",25.0,"Female","West","Retail",19,9949,9.0,9272.04,93.2,"18-25"],["2023-09-02",28.0,"Female","South","Finance",7,26193,2.0,12167.38,46.45,"26-35"],["2025-03-20",37.0,"Female","North","Retail",14,22961,10.0,11067.46,48.2,"36-45"],["2024-01-27",33.0,"Other","North","Healthcare",3,7890,5.0,5712.4,72.4,"26-35"],["2023-03-03",33.0,"Other","South","Healthcare",10,25226,4.0,12850.84,50.94,"26-35"],["2023-03-16",27.0,"Other","East","Electronics",11,47236,10.0,25504.96,53.99,"26-35"],["2024-07-24",54.0,"Female","East","Retail",4,17948,2.0,9295.44,51.79,"46-55"],["2025-06-13",67.0,"Other","West","Software",14,40822,9.0,21436.06,52.51,"above 56"],["2024-08-21",25.0,"Female","North","Software",19,20951,6.0,14042.76,67.03,"18-25"],["2023-12-09",51.0,"Male","North","Finance",14,23731,3.0,17292.52,72.87,"46-55"],["2024-08-30",58.0,"Female","West","Healthcare",17,25361,8.0,9090.7,35.85,"above 56"],["2025-08-22",44.0,"Male","North","Healthcare",12,15332,3.0,4991.4,32.56,"36-45"],["2024-07-02",65.0,"Other","South","Electronics",15,38883,5.0,24426.76,62.82,"above 56"],["2023-09-29",60.0,"Other","West","Software",13,48879,7.0,25725.3,52.63,"above 56"],["2023-07-28",37.0,"Female","North","Electronics",17,21753,10.0,12481.57,57.38,"36-45"],["2026-04-12",54.0,"Other","East","Healthcare",14,9372,2.0,-944.84,-10.08,"46-55"],["2024-06-17",65.0,"Female","North","Healthcare",1,26144,2.0,8277.28,31.66,"above 56"],["2024-10-23",55.0,"Other","South","Retail",15,45749,8.0,43836.51,95.82,"46-55"],["2025-11-19",62.0,"Female","East","Retail",11,34058,6.0,26032.78,76.44,"above 56"],["2024-05-31",39.0,"Other","East","Finance",4,10338,7.0,4692.94,45.4,"36-45"],["2024-01-02",20.0,"Other","West","Healthcare",18,26269,1.0,20435.79,77.79,"18-25"],["2023-05-30",44.0,"Male","South","Electronics",2,47233,6.0,26091.11,55.24,"36-45"],["2023-11-13",64.0,"Other","North","Healthcare",10,49409,7.0,42152.46,85.31,"above 56"],["2025-03-24",24.0,"Other","South","Software",15,11020,2.0,6662.0,60.45,"18-25"],["2023-02-19",56.0,"Male","East","Electronics",9,17575,7.0,9801.25,55.77,"above 56"],["2025-07-05",55.0,"Other","East","Software",14,46969,3.0,23121.47,49.23,"46-55"],["2025-04-26",29.0,"Other","North","Finance",17,33432,6.0,30113.04,90.07,"26-35"],["2023-11-19",50.0,"Male","East","Retail",13,37463,1.0,35606.0,95.04,"46-55"],["2023-02-17",29.0,"Male","North","Electronics",2,10768,8.0,3052.64,28.35,"26-35"],["2024-06-04",44.0,"Other","South","Retail",15,11344,8.0,8032.64,70.81,"36-45"],["2024-08-06",54.0,"Other","North","Electronics",13,46686,7.0,35047.22,75.07,"46-55"],["2024-06-18",42.0,"Female","West","Finance",8,3545,10.0,515.85,14.55,"36-45"],["2026-04-05",29.0,"Other","West","Electronics",12,33512,5.0,22624.72,67.51,"26-35"],["2025-02-20",64.0,"Female","South","Healthcare",4,35574,1.0,19956.16,56.1,"above 56"],["2025-02-20",57.0,"Male","West","Electronics",17,26007,5.0,11981.55,46.07,"above 56"],["2024-02-13",35.0,"Male","West","Software",4,20883,7.0,11542.46,55.27,"26-35"],["2025-02-21",34.0,"Male","West","Software",14,41325,6.0,25301.5,61.23,"26-35"],["2026-01-09",66.0,"Female","South","Retail",2,1140,9.0,-2316.8,-203.23,"above 56"],["2023-01-07",40.0,"Male","East","Retail",12,33370,2.0,22386.6,67.09,"36-45"],["2023-11-03",42.0,"Other","South","Electronics",2,21104,2.0,16348.0,77.46,"36-45"],["2023-02-08",49.0,"Other","West","Healthcare",15,5864,6.0,-1896.6,-32.34,"46-55"],["2024-10-06",42.0,"Male","East","Finance",7,45633,1.0,25602.78,56.11,"36-45"],["2025-03-26",39.0,"Female","East","Finance",12,857,7.0,-5630.4,-656.99,"36-45"],["2024-05-09",21.0,"Male","East","Retail",19,29554,5.0,19532.12,66.09,"18-25"],["2026-02-01",20.0,"Male","North","Electronics",17,42469,7.0,17543.78,41.31,"18-25"],["2023-02-26",22.0,"Male","East","Retail",1,44273,5.0,33020.16,74.58,"18-25"],["2025-12-02",42.0,"Male","South","Retail",9,8295,1.0,1032.3,12.44,"36-45"],["2023-07-15",39.0,"Male","North","Healthcare",11,29040,1.0,16088.4,55.4,"36-45"],["2023-11-28",65.0,"Male","South","Healthcare",15,43411,7.0,19278.71,44.41,"above 56"],["2026-01-23",38.0,"Male","North","Finance",2,29984,4.0,13827.68,46.12,"36-45"],["2024-02-25",30.0,"Male","North","Healthcare",12,18587,7.0,7018.6,37.76,"26-35"],["2023-09-30",37.0,"Female","East","Healthcare",9,5873,3.0,259.7,4.42,"36-45"],["2023-03-16",53.0,"Female","East","Electronics",14,25628,1.0,18555.0,72.4,"46-55"],["2023-06-18",28.0,"Other","West","Software",18,43792,9.0,25983.88,59.33,"26-35"],["2024-10-04",34.0,"Other","West","Retail",10,1654,8.0,510.14,30.84,"26-35"],["2023-06-21",59.0,"Male","North","Electronics",18,39320,2.0,21991.4,55.93,"above 56"],["2024-06-27",20.0,"Other","North","Electronics",18,11359,2.0,1953.2,17.2,"18-25"],["2023-03-11",21.0,"Other","North","Healthcare",9,13054,2.0,4923.1,37.71,"18-25"],["2025-12-30",65.0,"Other","South","Electronics",8,13155,5.0,-521.4,-3.96,"above 56"],["2023-03-14",18.0,"Other","South","Software",13,4066,10.0,-1438.08,-35.37,"above 56"],["2024-04-25",59.0,"Other","South","Healthcare",8,36384,8.0,18121.8,49.81,"above 56"],["2024-01-18",36.0,"Female","South","Electronics",3,39169,10.0,30134.34,76.93,"36-45"],["2024-10-21",56.0,"Female","South","Healthcare",13,40504,4.0,32075.32,79.19,"above 56"],["2023-08-20",58.0,"Other","South","Healthcare",17,37351,5.0,17296.11,46.31,"above 56"],["2023-06-21",36.0,"Female","South","Electronics",2,14744,6.0,3484.2,23.63,"36-45"],["2025-01-11",21.0,"Male","East","Software",15,4123,7.0,-3943.6,-95.65,"18-25"],["2025-08-14",51.0,"Female","East","Healthcare",17,25348,5.0,8603.56,33.94,"46-55"],["2023-03-27",45.0,"Male","East","Finance",16,555,2.0,-8832.8,-1591.5,"36-45"],["2024-07-18",25.0,"Female","North","Healthcare",9,42376,9.0,26952.24,63.6,"18-25"],["2024-01-15",43.0,"Male","South","Software",3,46287,6.0,35580.56,76.87,"36-45"],["2026-03-31",61.0,"Other","West","Software",11,31231,5.0,23474.66,75.16,"above 56"],["2025-01-03",62.0,"Male","North","Electronics",4,31324,6.0,17574.32,56.1,"above 56"],["2024-10-12",39.0,"Other","North","Retail",3,10840,7.0,7881.6,72.71,"36-45"],["2025-08-12",22.0,"Female","West","Retail",9,30372,8.0,22562.8,74.29,"18-25"],["2025-01-30",30.0,"Female","East","Healthcare",4,37948,2.0,22694.52,59.8,"26-35"],["2024-08-24",42.0,"Other","East","Finance",19,39020,6.0,22082.2,56.59,"36-45"],["2023-08-01",43.0,"Other","North","Finance",5,3044,1.0,-6890.64,-226.37,"36-45"],["2025-03-01",61.0,"Other","South","Software",6,36884,3.0,21190.96,57.45,"above 56"],["2025-05-20",59.0,"Other","West","Electronics",6,14252,7.0,8491.32,59.58,"above 56"],["2026-01-22",53.0,"Male","East","Retail",3,901,8.0,-3325.38,-369.08,"46-55"],["2023-03-27",28.0,"Other","North","Healthcare",2,43062,5.0,29608.36,68.76,"26-35"],["2024-04-02",42.0,"Other","East","Finance",11,1768,1.0,-4608.48,-260.66,"36-45"],["2025-05-09",31.0,"Other","North","Electronics",9,35198,2.0,22568.48,64.12,"26-35"],["2023-11-19",30.0,"Other","South","Software",13,48098,1.0,38481.08,80.01,"26-35"],["2024-08-22",23.0,"Other","South","Retail",12,37177,5.0,18315.97,49.27,"18-25"],["2023-03-04",47.0,"Other","East","Electronics",9,34506,5.0,20204.2,58.55,"46-55"],["2025-06-05",42.0,"Other","West","Finance",6,20329,3.0,9218.72,45.35,"36-45"],["2024-04-04",35.0,"Female","South","Software",9,31445,7.0,16623.6,52.87,"26-35"],["2025-05-17",61.0,"Other","North","Retail",15,13303,4.0,3286.37,24.7,"above 56"],["2024-05-09",35.0,"Other","North","Electronics",19,6543,2.0,3678.66,56.22,"26-35"],["2023-10-02",48.0,"Other","East","Software",18,36645,7.0,28332.0,77.31,"46-55"],["2025-03-10",40.0,"Male","West","Electronics",15,43721,6.0,32542.43,74.43,"36-45"],["2025-01-06",56.0,"Female","West","Electronics",18,32955,5.0,15942.7,48.38,"above 56"],["2023-03-21",44.0,"Other","East","Software",13,12298,6.0,2618.04,21.29,"36-45"],["2024-05-23",30.0,"Male","West","Electronics",7,20584,6.0,7563.08,36.74,"26-35"],["2024-09-10",42.0,"Male","North","Electronics",14,30310,9.0,27647.2,91.21,"36-45"],["2025-07-21",25.0,"Male","West","Healthcare",9,4198,4.0,-4011.72,-95.56,"18-25"],["2025-03-09",55.0,"Other","West","Healthcare",18,10737,5.0,-2076.1,-19.34,"46-55"],["2024-02-04",41.0,"Male","North","Retail",10,43935,7.0,30132.85,68.59,"36-45"],["2024-10-18",57.0,"Male","West","Electronics",6,1990,8.0,1373.4,69.02,"above 56"],["2023-11-02",47.0,"Other","West","Electronics",16,31966,9.0,16046.84,50.2,"46-55"],["2026-03-30",42.0,"Other","West","Finance",15,32417,10.0,23758.98,73.29,"36-45"],["2024-12-04",25.0,"Other","North","Software",14,44910,5.0,38911.9,86.64,"18-25"],["2023-06-07",25.0,"Other","West","Finance",13,7192,6.0,3966.68,55.15,"18-25"],["2024-11-06",35.0,"Other","West","Retail",3,37720,8.0,28602.4,75.83,"26-35"],["2024-04-11",54.0,"Female","South","Electronics",10,18176,6.0,4096.76,22.54,"46-55"],["2023-01-17",69.0,"Female","South","Software",6,21656,4.0,13030.52,60.17,"above 56"],["2024-03-05",29.0,"Male","North","Retail",11,49644,3.0,34275.84,69.04,"26-35"],["2026-03-19",25.0,"Male","West","Healthcare",14,17962,9.0,9027.76,50.26,"18-25"],["2026-04-01",55.0,"Other","North","Retail",1,38145,8.0,33000.15,86.51,"46-55"],["2024-07-18",30.0,"Male","East","Software",4,32511,8.0,14084.7,43.32,"26-35"],["2026-01-20",45.0,"Other","West","Software",7,4184,2.0,798.96,19.1,"36-45"],["2026-02-19",60.0,"Male","North","Electronics",15,36365,7.0,32298.8,88.82,"above 56"],["2024-11-24",60.0,"Other","East","Healthcare",14,29718,2.0,21881.94,73.63,"above 56"],["2025-11-12",63.0,"Other","North","Software",17,28299,6.0,16792.08,59.34,"above 56"],["2024-05-23",34.0,"Male","North","Electronics",12,41060,6.0,25479.6,62.05,"26-35"],["2023-04-02",65.0,"Male","South","Software",4,18883,6.0,5565.59,29.47,"above 56"],["2025-10-24",31.0,"Male","East","Electronics",5,14859,5.0,9891.05,66.57,"26-35"],["2023-07-25",23.0,"Male","West","Electronics",11,3288,4.0,-5561.68,-169.15,"18-25"],["2026-03-28",44.0,"Male","North","Retail",19,39868,7.0,20325.84,50.98,"36-45"],["2023-10-04",38.0,"Male","North","Retail",2,6970,10.0,1829.5,26.25,"36-45"],["2023-12-12",50.0,"Other","North","Retail",11,19680,1.0,16161.4,82.12,"46-55"],["2023-07-15",53.0,"Male","West","Retail",5,39788,3.0,23188.68,58.28,"46-55"],["2024-04-14",56.0,"Other","North","Electronics",8,35084,9.0,19758.16,56.32,"above 56"],["2023-05-14",51.0,"Other","South","Retail",11,29039,1.0,17243.15,59.38,"46-55"],["2023-08-14",35.0,"Other","East","Software",9,31394,9.0,18682.74,59.51,"26-35"],["2026-03-06",63.0,"Male","East","Healthcare",19,48685,2.0,43004.9,88.33,"above 56"],["2023-08-10",61.0,"Other","West","Electronics",10,48838,6.0,27692.6,56.7,"above 56"],["2025-02-20",68.0,"Other","South","Retail",9,30989,2.0,25618.32,82.67,"above 56"],["2023-08-28",55.0,"Male","North","Finance",3,5527,5.0,-271.59,-4.91,"46-55"],["2025-10-13",56.0,"Other","West","Electronics",4,7048,5.0,1045.52,14.83,"above 56"],["2023-11-01",58.0,"Male","West","Retail",6,1716,4.0,-6034.16,-351.64,"above 56"],["2023-02-09",42.0,"Male","North","Healthcare",17,29831,5.0,15311.84,51.33,"36-45"],["2023-04-13",32.0,"Male","West","Finance",10,25858,7.0,11210.24,43.35,"26-35"],["2024-06-08",54.0,"Female","East","Finance",6,42601,9.0,38174.91,89.61,"46-55"],["2024-07-23",18.0,"Female","West","Retail",5,42851,4.0,30221.78,70.53,"above 56"],["2024-11-11",61.0,"Other","East","Finance",8,39164,2.0,33161.88,84.67,"above 56"],["2025-12-25",49.0,"Male","North","Finance",3,28775,6.0,17111.25,59.47,"46-55"],["2024-08-20",59.0,"Other","East","Healthcare",14,26437,4.0,14957.86,56.58,"above 56"],["2023-02-11",42.0,"Other","West","Software",19,1391,7.0,-1936.85,-139.24,"36-45"],["2024-01-21",58.0,"Male","North","Finance",5,38990,8.0,17952.8,46.04,"above 56"],["2023-09-26",28.0,"Other","West","Electronics",13,34064,9.0,16558.04,48.61,"26-35"],["2026-03-04",41.0,"Male","East","Software",13,12279,3.0,4766.2,38.82,"36-45"],["2026-02-21",63.0,"Other","West","Software",6,25096,8.0,13605.16,54.21,"above 56"],["2024-01-30",66.0,"Male","North","Retail",18,23443,5.0,11161.53,47.61,"above 56"],["2023-06-03",43.0,"Other","South","Finance",19,21445,2.0,11959.4,55.77,"36-45"],["2025-06-12",42.0,"Female","East","Retail",1,40647,5.0,33629.42,82.74,"36-45"],["2023-07-29",68.0,"Other","East","Software",9,37367,2.0,25247.26,67.57,"above 56"],["2023-02-18",42.0,"Male","North","Retail",1,37383,1.0,29716.36,79.49,"36-45"],["2024-11-09",40.0,"Male","West","Retail",18,47138,5.0,21904.46,46.47,"36-45"],["2023-08-10",39.0,"Female","North","Software",5,8363,9.0,218.22,2.61,"36-45"],["2024-08-31",31.0,"Male","East","Healthcare",12,12012,3.0,248.2,2.07,"26-35"],["2025-10-17",23.0,"Female","West","Retail",15,47804,8.0,37255.6,77.93,"18-25"],["2026-02-22",38.0,"Female","West","Healthcare",19,47636,8.0,32130.24,67.45,"36-45"],["2023-07-28",68.0,"Other","West","Retail",4,30891,3.0,12792.42,41.41,"above 56"],["2023-07-04",61.0,"Female","East","Healthcare",7,20889,8.0,12286.41,58.82,"above 56"],["2025-02-21",27.0,"Other","North","Software",13,21828,10.0,9808.12,44.93,"26-35"],["2023-01-31",37.0,"Female","East","Electronics",2,42120,2.0,32115.4,76.25,"36-45"],["2023-07-29",42.0,"Male","West","Electronics",11,6977,10.0,447.46,6.41,"36-45"],["2025-09-21",31.0,"Other","West","Retail",9,35848,2.0,30289.2,84.49,"26-35"],["2025-12-19",21.0,"Male","South","Healthcare",2,21168,10.0,14241.72,67.28,"18-25"],["2024-09-19",28.0,"Female","South","Finance",12,15994,9.0,10302.84,64.42,"26-35"],["2023-03-25",25.0,"Male","East","Retail",12,45508,5.0,31359.84,68.91,"18-25"],["2024-09-10",50.0,"Other","East","Software",3,24704,6.0,13236.24,53.58,"46-55"],["2023-09-19",27.0,"Male","North","Finance",7,41664,6.0,34036.32,81.69,"26-35"],["2026-03-18",42.0,"Other","South","Retail",14,46089,9.0,27377.63,59.4,"36-45"],["2025-05-01",21.0,"Female","West","Software",3,25737,4.0,14008.82,54.43,"18-25"],["2023-02-10",42.0,"Female","South","Healthcare",7,17116,1.0,6882.88,40.21,"36-45"],["2024-07-11",68.0,"Female","North","Finance",12,41513,8.0,23042.88,55.51,"above 56"],["2023-02-23",31.0,"Other","South","Retail",8,27961,3.0,14401.75,51.51,"26-35"],["2026-01-10",50.0,"Female","West","Electronics",5,40693,5.0,34436.14,84.62,"46-55"],["2025-02-16",65.0,"Male","West","Software",4,17460,4.0,13366.8,76.56,"above 56"],["2025-03-04",29.0,"Other","North","Electronics",6,38717,3.0,25810.28,66.66,"26-35"],["2023-10-17",52.0,"Male","East","Finance",10,7858,8.0,3681.26,46.85,"46-55"],["2025-06-17",64.0,"Other","South","Electronics",4,44475,5.0,23357.5,52.52,"above 56"],["2024-09-25",35.0,"Female","South","Electronics",17,18450,3.0,6899.0,37.39,"26-35"],["2024-07-04",47.0,"Male","West","Software",5,28005,7.0,23709.8,84.66,"46-55"],["2023-09-14",45.0,"Female","North","Healthcare",9,7519,1.0,-2042.38,-27.16,"36-45"],["2026-03-06",29.0,"Male","North","Finance",5,13260,1.0,552.8,4.17,"26-35"],["2026-02-23",53.0,"Male","West","Software",18,40681,7.0,19501.27,47.94,"46-55"],["2024-01-26",60.0,"Other","West","Electronics",6,44737,1.0,31706.75,70.87,"above 56"],["2025-09-08",42.0,"Other","West","Electronics",6,24213,9.0,15292.35,63.16,"36-45"],["2024-10-09",67.0,"Female","East","Retail",3,19292,9.0,9326.4,48.34,"above 56"],["2023-05-13",42.0,"Other","North","Retail",9,6264,3.0,1546.16,24.68,"36-45"],["2024-07-13",37.0,"Other","South","Software",16,31271,6.0,20907.64,66.86,"36-45"],["2025-01-11",44.0,"Male","East","Software",19,9850,9.0,4992.5,50.69,"36-45"],["2024-04-22",55.0,"Male","East","Retail",9,24961,2.0,10723.14,42.96,"46-55"],["2025-06-03",32.0,"Male","West","Retail",7,26301,9.0,18051.71,68.64,"26-35"],["2025-05-15",61.0,"Female","East","Software",9,29630,5.0,19842.3,66.97,"above 56"],["2025-06-20",42.0,"Female","South","Healthcare",13,23267,3.0,16411.92,70.54,"36-45"],["2024-04-17",56.0,"Male","South","Retail",2,33037,10.0,24913.97,75.41,"above 56"],["2023-03-03",55.0,"Other","South","Retail",3,8907,6.0,6658.37,74.75,"46-55"],["2025-07-01",37.0,"Other","West","Finance",5,34345,1.0,17196.35,50.07,"36-45"],["2023-12-03",62.0,"Female","West","Healthcare",6,30197,5.0,15229.99,50.44,"above 56"],["2023-11-29",25.0,"Male","North","Software",14,21446,7.0,16451.1,76.71,"18-25"],["2025-09-09",25.0,"Female","South","Software",10,26269,7.0,12661.23,48.2,"18-25"],["2023-03-09",24.0,"Female","West","Electronics",17,48868,10.0,43078.92,88.15,"18-25"],["2026-01-13",65.0,"Other","North","Finance",9,44559,7.0,25841.3,57.99,"above 56"],["2026-03-02",66.0,"Male","West","Software",16,7875,10.0,-3561.25,-45.22,"above 56"],["2025-01-26",60.0,"Female","East","Electronics",14,15965,9.0,6883.3,43.11,"above 56"],["2024-10-08",42.0,"Other","North","Healthcare",7,26775,10.0,18587.0,69.42,"36-45"],["2025-10-27",43.0,"Male","West","Healthcare",2,5714,6.0,1111.2,19.45,"36-45"],["2025-05-19",20.0,"Other","South","Retail",12,18490,6.0,12045.7,65.15,"18-25"],["2023-02-22",49.0,"Male","North","Finance",10,1177,3.0,-4980.71,-423.17,"46-55"],["2024-02-22",58.0,"Male","North","Electronics",12,36203,9.0,27914.7,77.11,"above 56"],["2025-12-08",37.0,"Other","West","Software",12,43099,6.0,32450.22,75.29,"36-45"],["2023-05-03",48.0,"Male","West","Healthcare",9,7305,9.0,3257.45,44.59,"46-55"],["2024-05-24",35.0,"Male","South","Electronics",2,19963,10.0,12488.73,62.56,"26-35"],["2025-09-02",30.0,"Other","West","Finance",12,1656,6.0,-1085.72,-65.56,"26-35"],["2024-08-14",29.0,"Male","North","Software",18,43865,10.0,40266.7,91.8,"26-35"],["2025-06-22",54.0,"Other","South","Software",18,10851,2.0,-601.36,-5.54,"46-55"],["2023-06-07",30.0,"Other","South","Finance",3,13018,10.0,3227.74,24.79,"26-35"],["2025-07-11",36.0,"Male","West","Retail",1,41088,1.0,25475.2,62.0,"36-45"],["2023-10-11",69.0,"Other","North","Finance",6,18543,2.0,11591.97,62.51,"above 56"],["2026-03-01",46.0,"Other","South","Electronics",5,6383,9.0,4491.38,70.36,"46-55"],["2023-06-05",32.0,"Female","East","Electronics",4,10967,1.0,6952.61,63.4,"26-35"],["2024-10-18",42.0,"Other","West","Healthcare",5,21676,10.0,10912.8,50.35,"36-45"],["2023-09-04",42.0,"Male","South","Software",4,31123,9.0,22546.85,72.44,"36-45"],["2023-07-07",61.0,"Male","West","Electronics",2,22108,5.0,14099.32,63.77,"above 56"],["2025-08-30",34.0,"Female","West","Finance",9,29519,4.0,16631.15,56.34,"26-35"],["2023-03-22",44.0,"Other","North","Software",2,46961,8.0,22538.65,47.99,"36-45"],["2025-08-07",33.0,"Male","East","Software",12,44435,5.0,41815.65,94.11,"26-35"],["2025-08-25",60.0,"Male","West","Finance",7,24697,2.0,16952.63,68.64,"above 56"],["2023-11-24",42.0,"Female","West","Software",17,29501,2.0,17444.72,59.13,"36-45"],["2025-10-05",61.0,"Male","South","Software",15,26373,2.0,7976.45,30.24,"above 56"],["2023-03-19",66.0,"Other","West","Finance",13,25000,7.0,17870.0,71.48,"above 56"],["2025-04-23",66.0,"Female","South","Finance",15,49437,2.0,29999.12,60.68,"above 56"],["2023-09-08",36.0,"Other","West","Electronics",6,4023,2.0,-2933.9,-72.93,"36-45"],["2025-03-23",35.0,"Other","North","Healthcare",5,42405,2.0,22911.7,54.03,"26-35"],["2026-02-24",21.0,"Male","East","Software",10,48150,6.0,25912.0,53.82,"18-25"],["2023-09-23",50.0,"Other","North","Healthcare",15,43416,8.0,34743.44,80.02,"46-55"],["2024-04-23",20.0,"Other","North","Retail",19,29462,3.0,27296.14,92.65,"18-25"],["2025-08-23",52.0,"Female","West","Retail",3,15163,4.0,6932.43,45.72,"46-55"],["2023-11-19",68.0,"Other","North","Electronics",4,14099,7.0,11569.1,82.06,"above 56"],["2024-12-07",63.0,"Other","North","Healthcare",16,527,1.0,-2538.72,-481.73,"above 56"],["2023-06-02",24.0,"Other","West","Electronics",15,23402,9.0,13495.5,57.67,"18-25"],["2023-08-05",64.0,"Male","North","Finance",3,5768,5.0,2439.0,42.29,"above 56"],["2025-03-28",69.0,"Male","North","Finance",2,16562,8.0,7738.12,46.72,"above 56"],["2024-11-17",49.0,"Other","West","Retail",4,29720,10.0,16046.6,53.99,"46-55"],["2025-07-23",18.0,"Other","West","Software",9,27516,2.0,16753.76,60.89,"above 56"],["2024-11-23",34.0,"Other","South","Healthcare",1,3061,7.0,-1632.81,-53.34,"26-35"],["2023-05-03",42.0,"Male","South","Healthcare",18,23647,8.0,8293.67,35.07,"36-45"],["2023-07-19",31.0,"Male","South","Finance",13,13863,3.0,3146.69,22.7,"26-35"],["2024-06-15",53.0,"Other","East","Healthcare",15,36730,4.0,25817.6,70.29,"46-55"],["2023-05-07",56.0,"Female","West","Finance",13,28966,4.0,20823.08,71.89,"above 56"],["2024-10-04",47.0,"Male","North","Electronics",8,18541,2.0,14230.98,76.75,"46-55"],["2023-07-21",42.0,"Female","East","Finance",18,41733,5.0,22532.46,53.99,"36-45"],["2023-10-21",38.0,"Female","South","Healthcare",15,22647,4.0,6476.49,28.6,"36-45"],["2023-07-01",42.0,"Male","North","Software",9,18795,6.0,7045.9,37.49,"36-45"],["2026-04-14",42.0,"Female","East","Finance",10,12215,2.0,6716.45,54.99,"36-45"],["2024-11-02",26.0,"Female","South","Electronics",8,26424,5.0,16717.56,63.27,"26-35"],["2025-06-12",37.0,"Male","East","Finance",7,42197,3.0,28056.66,66.49,"36-45"],["2024-12-29",24.0,"Male","West","Retail",19,2780,3.0,-7336.4,-263.9,"18-25"],["2023-03-09",33.0,"Other","East","Software",13,29458,3.0,22455.24,76.23,"26-35"],["2023-01-23",60.0,"Female","South","Retail",6,37267,5.0,29525.94,79.23,"above 56"],["2025-07-14",44.0,"Female","West","Healthcare",12,31169,4.0,22616.27,72.56,"36-45"],["2023-10-25",59.0,"Male","West","Retail",4,4377,8.0,1957.44,44.72,"above 56"],["2024-11-06",33.0,"Female","North","Healthcare",13,14108,5.0,6066.88,43.0,"26-35"],["2024-02-14",63.0,"Female","South","Retail",5,15912,10.0,9072.16,57.01,"above 56"],["2025-07-15",51.0,"Other","North","Healthcare",18,5724,4.0,-1232.12,-21.53,"46-55"],["2025-02-15",40.0,"Other","North","Electronics",2,30319,2.0,15375.44,50.71,"36-45"],["2026-04-10",59.0,"Male","West","Retail",4,16399,1.0,5434.37,33.14,"above 56"],["2026-04-12",68.0,"Female","West","Finance",14,4379,1.0,-5454.81,-124.57,"above 56"],["2025-09-18",38.0,"Female","East","Retail",3,24743,6.0,9881.25,39.94,"36-45"],["2025-04-08",21.0,"Female","East","Finance",7,2531,1.0,-4681.0,-184.95,"18-25"],["2026-04-09",39.0,"Other","East","Finance",2,6830,4.0,3913.8,57.3,"36-45"],["2024-10-04",60.0,"Other","West","Electronics",19,22922,3.0,12010.18,52.4,"above 56"],["2024-08-04",67.0,"Male","East","Retail",5,15703,7.0,14651.88,93.31,"above 56"],["2023-06-25",66.0,"Other","West","Retail",14,19431,10.0,12203.35,62.8,"above 56"],["2025-12-15",29.0,"Other","South","Finance",5,33991,8.0,25996.62,76.48,"26-35"],["2025-07-07",23.0,"Male","North","Retail",1,6799,5.0,-4880.74,-71.79,"18-25"],["2026-01-22",28.0,"Male","North","Healthcare",12,25007,7.0,15240.81,60.95,"26-35"],["2025-09-07",18.0,"Male","North","Retail",8,25272,4.0,11368.64,44.99,"above 56"],["2024-12-25",47.0,"Male","North","Finance",7,10892,2.0,679.48,6.24,"46-55"],["2023-11-01",65.0,"Female","North","Healthcare",15,15430,7.0,11087.8,71.86,"above 56"],["2023-12-01",37.0,"Female","East","Electronics",11,4453,1.0,-4550.83,-102.2,"36-45"],["2023-05-04",18.0,"Other","South","Software",18,37653,5.0,31079.82,82.54,"above 56"],["2024-08-23",57.0,"Male","North","Retail",7,26625,7.0,9425.25,35.4,"above 56"],["2024-09-09",28.0,"Other","North","Retail",14,25153,2.0,17764.88,70.63,"26-35"],["2025-03-11",42.0,"Male","East","Electronics",5,28850,9.0,14252.5,49.4,"36-45"],["2025-12-28",27.0,"Male","West","Software",14,39033,5.0,30099.37,77.11,"26-35"],["2026-03-18",20.0,"Male","North","Healthcare",5,2946,9.0,1323.82,44.94,"18-25"],["2023-06-09",23.0,"Male","South","Finance",19,10853,6.0,4120.46,37.97,"18-25"],["2023-12-31",66.0,"Male","East","Electronics",18,5897,1.0,1401.87,23.77,"above 56"],["2023-08-27",29.0,"Male","West","Retail",12,14901,4.0,5215.68,35.0,"26-35"],["2025-11-22",34.0,"Female","South","Electronics",7,2114,5.0,-1175.36,-55.6,"26-35"],["2024-08-28",32.0,"Female","West","Software",2,23872,3.0,15512.04,64.98,"26-35"],["2024-12-15",42.0,"Male","South","Healthcare",3,518,5.0,-4316.6,-833.32,"36-45"],["2024-05-13",28.0,"Other","South","Retail",11,5993,1.0,5004.84,83.51,"26-35"],["2025-06-25",60.0,"Other","East","Electronics",16,3769,8.0,-791.63,-21.0,"above 56"],["2025-06-07",61.0,"Female","South","Electronics",11,1470,6.0,-7272.0,-494.69,"above 56"],["2025-06-06",63.0,"Male","East","Electronics",11,31912,8.0,13490.8,42.28,"above 56"],["2025-05-22",47.0,"Male","West","Finance",8,12345,2.0,4129.3,33.45,"46-55"],["2023-03-27",33.0,"Other","South","Electronics",17,10034,1.0,3535.16,35.23,"26-35"],["2023-06-16",38.0,"Female","East","Retail",8,20314,2.0,15859.88,78.07,"36-45"],["2025-04-05",41.0,"Male","South","Software",14,43554,2.0,27231.5,62.52,"36-45"],["2023-02-25",55.0,"Male","South","Healthcare",3,23914,10.0,21607.74,90.36,"46-55"],["2026-02-26",67.0,"Other","West","Electronics",18,10639,10.0,2467.86,23.2,"above 56"],["2024-11-08",42.0,"Male","East","Finance",17,13130,3.0,7891.5,60.1,"36-45"],["2025-05-20",67.0,"Female","East","Finance",9,25149,10.0,11710.28,46.56,"above 56"],["2024-12-26",30.0,"Female","West","Healthcare",16,45786,10.0,31527.82,68.86,"26-35"],["2026-03-31",34.0,"Female","South","Electronics",15,9363,8.0,6944.96,74.17,"26-35"],["2024-08-22",55.0,"Female","South","Healthcare",4,8048,5.0,2190.08,27.21,"46-55"],["2024-09-08",57.0,"Female","North","Electronics",17,19005,8.0,11035.35,58.07,"above 56"],["2023-09-16",68.0,"Male","East","Software",3,29362,9.0,23771.32,80.96,"above 56"],["2023-10-10",42.0,"Other","South","Electronics",8,25175,9.0,15343.75,60.95,"36-45"],["2023-09-19",19.0,"Male","West","Electronics",18,41320,10.0,37354.2,90.4,"18-25"],["2023-05-20",38.0,"Other","West","Finance",8,39738,2.0,27855.82,70.1,"36-45"],["2023-03-03",66.0,"Male","West","Healthcare",13,40998,2.0,23377.56,57.02,"above 56"],["2025-12-07",33.0,"Other","South","Retail",2,15315,9.0,11485.55,75.0,"26-35"],["2024-07-04",68.0,"Female","South","Software",5,21226,8.0,10303.86,48.54,"above 56"],["2026-01-26",42.0,"Female","West","Retail",4,46814,1.0,36850.16,78.72,"36-45"],["2024-11-17",48.0,"Female","South","Software",11,42371,8.0,19187.86,45.29,"46-55"],["2024-11-27",18.0,"Other","West","Electronics",15,31256,10.0,12737.72,40.75,"above 56"],["2024-07-27",37.0,"Male","East","Finance",8,3998,5.0,3072.22,76.84,"36-45"],["2025-02-13",59.0,"Male","North","Retail",1,27467,2.0,17536.29,63.84,"above 56"],["2024-10-25",50.0,"Other","West","Healthcare",10,28382,3.0,25940.44,91.4,"46-55"],["2024-12-20",31.0,"Female","East","Finance",10,10971,6.0,7085.64,64.59,"26-35"],["2026-01-22",50.0,"Male","North","Finance",7,45308,5.0,38375.6,84.7,"46-55"],["2025-12-07",21.0,"Other","South","Healthcare",8,48460,9.0,39881.8,82.3,"18-25"],["2024-09-13",53.0,"Other","South","Software",10,20041,5.0,4440.06,22.15,"46-55"],["2024-05-06",28.0,"Female","West","Software",15,22820,3.0,16293.2,71.4,"26-35"],["2025-02-03",35.0,"Male","North","Finance",10,15085,2.0,12114.85,80.31,"26-35"],["2023-05-07",40.0,"Female","North","Electronics",10,46099,6.0,28346.27,61.49,"36-45"],["2024-08-04",45.0,"Other","North","Healthcare",10,19434,5.0,5877.16,30.24,"36-45"],["2024-09-16",30.0,"Other","West","Software",18,1526,4.0,-2848.1,-186.64,"26-35"],["2025-07-14",58.0,"Male","North","Electronics",19,42605,6.0,35820.65,84.08,"above 56"],["2026-04-09",19.0,"Male","East","Healthcare",19,2983,7.0,-4966.32,-166.49,"18-25"],["2024-05-25",42.0,"Male","West","Finance",15,30949,5.0,20785.22,67.16,"36-45"],["2025-08-06",62.0,"Male","North","Software",13,36955,8.0,19044.6,51.53,"above 56"],["2023-07-02",42.0,"Female","South","Software",7,15149,8.0,11016.63,72.72,"36-45"],["2024-08-24",23.0,"Female","North","Finance",18,25652,8.0,16055.28,62.59,"18-25"],["2023-05-01",53.0,"Female","West","Electronics",7,44915,8.0,39677.65,88.34,"46-55"],["2023-01-23",63.0,"Male","North","Finance",3,32871,4.0,14796.31,45.01,"above 56"],["2025-02-23",63.0,"Male","South","Retail",2,29414,3.0,14137.78,48.06,"above 56"],["2024-03-27",27.0,"Male","West","Retail",7,6737,1.0,3448.63,51.19,"26-35"],["2023-09-13",59.0,"Male","West","Finance",1,28740,2.0,15647.2,54.44,"above 56"],["2024-06-22",21.0,"Male","South","Software",3,40349,6.0,21010.24,52.07,"18-25"],["2024-04-21",51.0,"Female","North","Electronics",11,30184,10.0,20420.24,67.65,"46-55"],["2024-03-21",53.0,"Female","East","Electronics",1,32960,8.0,19996.4,60.67,"46-55"],["2023-09-02",29.0,"Female","West","Healthcare",3,28039,10.0,13722.37,48.94,"26-35"],["2024-12-27",41.0,"Other","East","Retail",5,36817,4.0,22582.9,61.34,"36-45"],["2023-07-13",60.0,"Female","West","Software",14,41387,8.0,35925.3,86.8,"above 56"],["2024-11-02",22.0,"Male","North","Electronics",14,20590,7.0,13942.3,67.71,"18-25"],["2024-07-12",68.0,"Female","North","Healthcare",19,29274,8.0,15056.62,51.43,"above 56"],["2023-09-10",61.0,"Other","East","Finance",3,25978,2.0,12880.64,49.58,"above 56"],["2025-05-17",68.0,"Female","West","Software",15,29196,3.0,22703.56,77.76,"above 56"],["2023-04-02",21.0,"Male","West","Healthcare",5,47298,8.0,35580.44,75.23,"18-25"],["2025-08-11",66.0,"Male","West","Retail",6,2222,8.0,-1520.74,-68.44,"above 56"],["2023-06-27",36.0,"Male","West","Finance",13,5559,8.0,-2979.08,-53.59,"36-45"],["2023-08-07",21.0,"Male","West","Healthcare",5,9882,8.0,6185.4,62.59,"18-25"],["2026-03-07",38.0,"Male","East","Finance",13,48309,4.0,26295.48,54.43,"36-45"],["2025-11-16",42.0,"Male","West","Software",19,49486,3.0,32901.36,66.49,"36-45"],["2025-03-08",41.0,"Male","North","Retail",18,4580,4.0,2565.4,56.01,"36-45"],["2025-01-24",55.0,"Male","North","Software",12,34286,10.0,28428.56,82.92,"46-55"],["2024-02-08",35.0,"Female","North","Retail",18,26355,7.0,8105.85,30.76,"26-35"],["2023-03-10",25.0,"Other","East","Software",1,25628,7.0,15271.08,59.59,"18-25"],["2023-12-15",64.0,"Male","West","Electronics",14,39414,2.0,26562.9,67.39,"above 56"],["2025-07-26",34.0,"Other","North","Healthcare",5,27050,1.0,17216.5,63.65,"26-35"],["2025-09-02",46.0,"Male","West","Retail",4,41521,7.0,26348.91,63.46,"46-55"],["2025-05-10",48.0,"Other","West","Software",10,9489,6.0,4708.09,49.62,"46-55"],["2025-02-22",25.0,"Other","West","Electronics",12,18749,5.0,8565.22,45.68,"18-25"],["2023-10-13",60.0,"Male","West","Electronics",13,14120,1.0,8990.4,63.67,"above 56"],["2023-01-02",57.0,"Female","North","Software",11,42922,5.0,27931.6,65.08,"above 56"],["2024-03-18",35.0,"Female","North","Healthcare",14,18598,8.0,10384.46,55.84,"26-35"],["2024-06-15",30.0,"Other","West","Finance",10,37190,10.0,33830.2,90.97,"26-35"],["2023-12-19",33.0,"Female","North","Electronics",4,7098,4.0,-3145.72,-44.32,"26-35"],["2024-05-12",22.0,"Other","West","Retail",7,21370,2.0,9981.6,46.71,"18-25"],["2026-01-11",60.0,"Female","East","Software",4,37330,9.0,15998.3,42.86,"above 56"],["2025-08-21",55.0,"Male","East","Healthcare",9,49796,4.0,31768.68,63.8,"46-55"],["2026-01-17",65.0,"Female","East","Software",7,19659,6.0,16989.46,86.42,"above 56"],["2025-10-06",28.0,"Male","South","Electronics",12,20419,10.0,8516.78,41.71,"26-35"],["2024-11-27",19.0,"Male","East","Healthcare",17,40277,5.0,24012.51,59.62,"18-25"],["2026-02-24",58.0,"Male","South","Finance",10,34008,10.0,25585.76,75.23,"above 56"],["2025-04-03",21.0,"Female","North","Retail",7,16106,2.0,14752.82,91.6,"18-25"],["2023-11-20",30.0,"Female","East","Finance",2,44968,10.0,32491.76,72.26,"26-35"],["2023-09-27",40.0,"Male","West","Electronics",10,38373,8.0,26857.29,69.99,"36-45"],["2026-01-19",33.0,"Male","East","Healthcare",11,17676,5.0,12016.28,67.98,"26-35"],["2023-01-16",67.0,"Male","West","Retail",1,2200,2.0,-4650.0,-211.36,"above 56"],["2023-08-24",58.0,"Male","East","Electronics",5,46268,2.0,33994.92,73.47,"above 56"],["2024-03-25",38.0,"Other","East","Healthcare",16,28849,1.0,17221.65,59.7,"36-45"],["2024-01-21",32.0,"Other","South","Finance",2,17460,9.0,11167.2,63.96,"26-35"],["2025-04-09",38.0,"Male","East","Electronics",1,23108,10.0,17207.08,74.46,"36-45"],["2024-05-04",58.0,"Female","South","Retail",16,13817,10.0,6005.41,43.46,"above 56"],["2023-08-17",67.0,"Female","South","Finance",11,17986,4.0,10774.52,59.91,"above 56"],["2024-10-16",54.0,"Other","West","Software",13,20730,2.0,5913.2,28.52,"46-55"],["2023-01-09",24.0,"Female","South","Retail",9,9988,5.0,1385.4,13.87,"18-25"],["2023-04-03",35.0,"Male","East","Healthcare",17,6927,5.0,4024.87,58.1,"26-35"],["2026-01-02",44.0,"Female","North","Finance",3,3618,4.0,-993.86,-27.47,"36-45"],["2023-12-13",28.0,"Male","East","Retail",15,42581,4.0,30949.71,72.68,"26-35"],["2025-10-12",21.0,"Other","West","Software",12,19674,5.0,16699.12,84.88,"18-25"],["2024-11-14",29.0,"Other","North","Electronics",1,514,4.0,-2688.38,-523.03,"26-35"],["2024-07-31",34.0,"Female","North","Finance",5,1980,3.0,-4255.4,-214.92,"26-35"],["2023-01-24",37.0,"Female","West","Retail",13,19814,3.0,15626.0,78.86,"36-45"],["2023-08-27",63.0,"Male","North","Electronics",7,20466,2.0,18502.36,90.41,"above 56"],["2025-05-24",50.0,"Male","South","Electronics",3,22851,9.0,12977.9,56.79,"46-55"],["2023-03-01",53.0,"Male","North","Finance",4,11517,4.0,1553.96,13.49,"46-55"],["2024-12-23",35.0,"Male","North","Healthcare",17,8772,8.0,4773.04,54.41,"26-35"],["2025-07-12",23.0,"Other","West","Healthcare",17,20866,2.0,11019.72,52.81,"18-25"],["2025-06-25",61.0,"Female","West","Healthcare",15,30437,9.0,26331.15,86.51,"above 56"],["2023-06-09",56.0,"Male","West","Healthcare",2,23997,5.0,13425.6,55.95,"above 56"],["2025-08-10",21.0,"Male","West","Healthcare",2,33315,1.0,15565.9,46.72,"18-25"],["2026-01-13",45.0,"Other","East","Electronics",12,35340,10.0,23939.0,67.74,"36-45"],["2025-02-10",42.0,"Male","South","Finance",2,48665,6.0,26298.85,54.04,"36-45"],["2025-05-22",22.0,"Male","West","Healthcare",13,41905,5.0,32666.95,77.95,"18-25"],["2025-11-29",69.0,"Other","West","Electronics",16,4817,6.0,-5579.12,-115.82,"above 56"],["2026-01-19",52.0,"Other","West","Electronics",7,48408,6.0,31021.28,64.08,"46-55"],["2024-07-20",61.0,"Male","North","Electronics",2,40198,6.0,30404.04,75.64,"above 56"],["2023-06-12",50.0,"Male","North","Finance",17,18711,3.0,5070.25,27.1,"46-55"],["2023-05-03",42.0,"Male","South","Healthcare",18,23647,8.0,8293.67,35.07,"36-45"],["2025-06-06",63.0,"Male","East","Retail",11,31912,8.0,13490.8,42.28,"above 56"],["2025-12-02",42.0,"Male","South","Electronics",9,8295,1.0,1032.3,12.44,"36-45"],["2025-07-27",42.0,"Female","North","Electronics",15,4067,9.0,1289.96,31.72,"36-45"],["2023-03-21",22.0,"Male","North","Software",18,28993,3.0,19627.89,67.7,"18-25"],["2024-10-17",35.0,"Male","East","Retail",10,47825,1.0,37493.25,78.4,"26-35"],["2026-02-22",52.0,"Other","West","Electronics",2,21907,4.0,12106.86,55.26,"46-55"],["2023-08-27",29.0,"Male","West","Retail",12,14901,4.0,5215.68,35.0,"26-35"],["2023-11-19",50.0,"Female","East","Retail",13,37463,1.0,35606.0,95.04,"46-55"],["2024-08-04",45.0,"Other","West","Healthcare",10,19434,5.0,5877.16,30.24,"36-45"],["2024-04-23",20.0,"Other","East","Retail",19,29462,3.0,27296.14,92.65,"18-25"]];
+</script>
+<script>
+// ============ FIELD MAP ============
+// RAW_DATA rows: [d, a, g, r, c, u, rev, cs, p, pm, ag]
+const F = {d:0,a:1,g:2,r:3,c:4,u:5,rev:6,cs:7,p:8,pm:9,ag:10};
+
+const COLORS = {
+  green950:'#0b2e1a', green900:'#0f3d22', green800:'#14502c', green700:'#1b6b3a', green600:'#237a42',
+  green500:'#2e9650', green400:'#52b06c', gray:'#8a9690', red:'#c0392b', gold:'#d4a017', line:'#eef3ef'
+};
+const CAT_COLORS = {Electronics:'#0f3d22', Finance:'#1b6b3a', Healthcare:'#86c99a', Retail:'#2e9650', Software:'#5a6b62'};
+const REGION_COLORS = {West:'#0a2e1c', North:'#14502c', East:'#2e9650', South:'#86c99a'};
+const GENDER_COLORS = {Male:'#0f3d22', Female:'#2e9650', Other:'#bfc7c2'};
+const AGE_COLORS = {'above 56':'#0f3d22','46-55':'#1b6b3a','36-45':'#2e9650','26-35':'#7fbf95','18-25':'#bfe3cb'};
+
+const ALL_REGIONS = ['North','South','East','West'];
+const ALL_CATEGORIES = ['Electronics','Finance','Healthcare','Retail','Software'];
+const ALL_GENDERS = ['Male','Female','Other'];
+const ALL_AGEGROUPS = ['18-25','26-35','36-45','46-55','above 56'];
+
+const MIN_DATE = '2023-01-01';
+const MAX_DATE = '2026-04-14';
+
+let state = {
+  dateFrom: MIN_DATE,
+  dateTo: MAX_DATE,
+  region: new Set(ALL_REGIONS),
+  category: new Set(ALL_CATEGORIES),
+  gender: new Set(ALL_GENDERS),
+  agegroup: new Set(ALL_AGEGROUPS)
+};
+
+// ============ HELPERS ============
+function fmtMoney(v){
+  const sign = v<0?'-':'';
+  v = Math.abs(v);
+  if (v >= 1e6) return sign+'$' + (v/1e6).toFixed(2) + 'M';
+  if (v >= 1e3) return sign+'$' + (v/1e3).toFixed(1) + 'K';
+  return sign+'$' + v.toFixed(0);
+}
+function fmtNum(v){
+  if (Math.abs(v) >= 1e3) return (v/1e3).toFixed(1) + 'K';
+  return v.toFixed(0);
+}
+function monthKey(dateStr){ return dateStr.slice(0,7); }
+function monthLabel(key){
+  const [y,m] = key.split('-');
+  const names=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return names[parseInt(m,10)-1] + ' ' + y.slice(2);
+}
+function svgEl(tag, attrs){
+  const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+function clearAndGetSize(hostId){
+  const host = document.getElementById(hostId);
+  host.innerHTML = '';
+  const w = host.clientWidth || 200;
+  const h = host.clientHeight || 100;
+  return {host, w, h};
+}
+function newSvg(w,h){
+  return svgEl('svg', {viewBox:`0 0 ${w} ${h}`, width:'100%', height:'100%', preserveAspectRatio:'none'});
+}
+
+// ============ SHARED TOOLTIP ============
+const tooltipEl = document.getElementById('chart-tooltip');
+function showTooltip(clientX, clientY, html){
+  tooltipEl.innerHTML = html;
+  tooltipEl.style.display = 'block';
+  let left = clientX;
+  let top = clientY - 10;
+  tooltipEl.style.left = left + 'px';
+  tooltipEl.style.top = top + 'px';
+  // keep within viewport
+  requestAnimationFrame(()=>{
+    const rect = tooltipEl.getBoundingClientRect();
+    let adjLeft = left, adjTop = top;
+    if (rect.left < 4) adjLeft = left + (4 - rect.left);
+    if (rect.right > window.innerWidth - 4) adjLeft = left - (rect.right - (window.innerWidth-4));
+    if (rect.top < 4) adjTop = top + (4 - rect.top) + 24;
+    tooltipEl.style.left = adjLeft + 'px';
+    tooltipEl.style.top = adjTop + 'px';
+  });
+}
+function hideTooltip(){
+  tooltipEl.style.display = 'none';
+}
+// Catmull-Rom to cubic-bezier smooth path through points [[x,y],...]
+function smoothPath(pts){
+  if (pts.length < 3){
+    let d = `M ${pts[0][0]},${pts[0][1]}`;
+    for (let i=1;i<pts.length;i++) d += ` L ${pts[i][0]},${pts[i][1]}`;
+    return d;
+  }
+  let d = `M ${pts[0][0]},${pts[0][1]}`;
+  for (let i=0;i<pts.length-1;i++){
+    const p0 = pts[i-1] || pts[i];
+    const p1 = pts[i];
+    const p2 = pts[i+1];
+    const p3 = pts[i+2] || p2;
+    const cp1x = p1[0] + (p2[0]-p0[0])/6;
+    const cp1y = p1[1] + (p2[1]-p0[1])/6;
+    const cp2x = p2[0] - (p3[0]-p1[0])/6;
+    const cp2y = p2[1] - (p3[1]-p1[1])/6;
+    d += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2[0]},${p2[1]}`;
+  }
+  return d;
+}
+
+// ============ FILTERING ============
+function getFiltered(){
+  const from = state.dateFrom, to = state.dateTo;
+  return RAW_DATA.filter(row=>{
+    const d = row[F.d];
+    if (d < from || d > to) return false;
+    if (!state.region.has(row[F.r])) return false;
+    if (!state.category.has(row[F.c])) return false;
+    if (!state.gender.has(row[F.g])) return false;
+    if (!state.agegroup.has(row[F.ag])) return false;
+    return true;
+  });
+}
+function getPreviousPeriod(){
+  const from = new Date(state.dateFrom);
+  const to = new Date(state.dateTo);
+  const lengthMs = to - from;
+  const prevTo = new Date(from.getTime() - 86400000);
+  const prevFrom = new Date(prevTo.getTime() - lengthMs);
+  const prevFromStr = prevFrom.toISOString().slice(0,10);
+  const prevToStr = prevTo.toISOString().slice(0,10);
+  return RAW_DATA.filter(row=>{
+    const d = row[F.d];
+    if (d < prevFromStr || d > prevToStr) return false;
+    if (!state.region.has(row[F.r])) return false;
+    if (!state.category.has(row[F.c])) return false;
+    if (!state.gender.has(row[F.g])) return false;
+    if (!state.agegroup.has(row[F.ag])) return false;
+    return true;
+  });
+}
+function pctDelta(curr, prev){
+  if (!prev) return null;
+  return ((curr - prev) / Math.abs(prev)) * 100;
+}
+
+// ============ AGGREGATIONS ============
+function sumBy(rows, idx){ return rows.reduce((a,r)=>a+r[idx],0); }
+function avgBy(rows, idx){ return rows.length ? sumBy(rows,idx)/rows.length : 0; }
+function groupSum(rows, keyIdx, valIdx){
+  const m = {};
+  rows.forEach(r=>{ const k=r[keyIdx]; m[k]=(m[k]||0)+r[valIdx]; });
+  return m;
+}
+function monthlySeries(rows, valIdx, agg){
+  const m = {};
+  rows.forEach(r=>{
+    const k = monthKey(r[F.d]);
+    if (!m[k]) m[k] = {sum:0,count:0};
+    m[k].sum += r[valIdx];
+    m[k].count += 1;
+  });
+  const keys = Object.keys(m).sort();
+  return keys.map(k=>({key:k, label:monthLabel(k), value: agg==='avg' ? (m[k].count?m[k].sum/m[k].count:0) : (agg==='count'? m[k].count : m[k].sum)}));
+}
+
+// ============ RENDER: KPIs ============
+function renderKPIs(rows, prevRows){
+  const totalRevenue = sumBy(rows, F.rev);
+  const totalProfit = sumBy(rows, F.p);
+  const avgMargin = avgBy(rows, F.pm);
+  const totalUnits = sumBy(rows, F.u);
+  const avgSat = avgBy(rows, F.cs);
+  const aov = rows.length ? totalRevenue / rows.length : 0;
+
+  const prevRevenue = sumBy(prevRows, F.rev);
+  const prevProfit = sumBy(prevRows, F.p);
+  const prevMargin = avgBy(prevRows, F.pm);
+  const prevUnits = sumBy(prevRows, F.u);
+  const prevSat = avgBy(prevRows, F.cs);
+  const prevAov = prevRows.length ? prevRevenue/prevRows.length : 0;
+
+  document.getElementById('kpi-revenue').textContent = fmtMoney(totalRevenue);
+  document.getElementById('kpi-profit').textContent = fmtMoney(totalProfit);
+  document.getElementById('kpi-margin').textContent = avgMargin.toFixed(2) + '%';
+  document.getElementById('kpi-units').textContent = fmtNum(totalUnits);
+  document.getElementById('kpi-satisfaction').textContent = avgSat.toFixed(2) + ' / 10';
+  document.getElementById('kpi-aov').textContent = fmtMoney(aov);
+
+  setDelta('kpi-revenue-delta', pctDelta(totalRevenue, prevRevenue));
+  setDelta('kpi-profit-delta', pctDelta(totalProfit, prevProfit));
+  setDelta('kpi-margin-delta', pctDelta(avgMargin, prevMargin));
+  setDelta('kpi-units-delta', pctDelta(totalUnits, prevUnits));
+  setDelta('kpi-satisfaction-delta', pctDelta(avgSat, prevSat));
+  setDelta('kpi-aov-delta', pctDelta(aov, prevAov));
+
+  const revD = pctDelta(totalRevenue,prevRevenue);
+  const profD = pctDelta(totalProfit,prevProfit);
+  document.getElementById('ins-revenue').textContent = (revD===null||!isFinite(revD)) ? `Total revenue across the selected period is ${fmtMoney(totalRevenue)}.` : `Total revenue ${revD>=0?'increased':'decreased'} by ${Math.abs(revD).toFixed(1)}% compared to the previous period.`;
+  document.getElementById('ins-profit').textContent = (profD===null||!isFinite(profD)) ? `Total profit across the selected period is ${fmtMoney(totalProfit)}.` : `Total profit ${profD>=0?'increased':'decreased'} by ${Math.abs(profD).toFixed(1)}% compared to the previous period.`;
+  document.getElementById('ins-margin').textContent = `Average profit margin stands at ${avgMargin.toFixed(2)}%, showing ${avgMargin>=40?'strong':'moderate'} profitability.`;
+
+  const ageRev = groupSum(rows, F.ag, F.rev);
+  const ageEntries = Object.entries(ageRev).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('ins-age').textContent = ageEntries.length ? `Customers aged ${ageEntries[0][0]} generate the highest revenue of ${fmtMoney(ageEntries[0][1])}.` : 'No data for current filters.';
+
+  const catRev = groupSum(rows, F.c, F.rev);
+  const catEntries = Object.entries(catRev).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('ins-cat').textContent = catEntries.length ? `${catEntries[0][0]} leads with ${fmtMoney(catEntries[0][1])} in total revenue.` : 'No data for current filters.';
+
+  const regRev = groupSum(rows, F.r, F.rev);
+  const regEntries = Object.entries(regRev).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('ins-region').textContent = regEntries.length ? `${regEntries[0][0]} region contributes the most revenue of ${fmtMoney(regEntries[0][1])}.` : 'No data for current filters.';
+
+  document.getElementById('ins-sat').textContent = `Average customer satisfaction is ${avgSat.toFixed(2)}/10 across ${rows.length} transactions.`;
+
+  document.getElementById('m-customers').textContent = rows.length;
+  document.getElementById('m-transactions').textContent = rows.length;
+
+  return {
+    revenue: pctDelta(totalRevenue, prevRevenue),
+    profit: pctDelta(totalProfit, prevProfit),
+    margin: pctDelta(avgMargin, prevMargin),
+    units: pctDelta(totalUnits, prevUnits),
+    satisfaction: pctDelta(avgSat, prevSat),
+    aov: pctDelta(aov, prevAov)
+  };
+}
+function setDelta(id, pct){
+  const el = document.getElementById(id);
+  if (pct === null || isNaN(pct) || !isFinite(pct)) { el.textContent = ''; el.className='kpi-delta'; return; }
+  const up = pct >= 0;
+  el.className = 'kpi-delta ' + (up?'up':'down');
+  el.textContent = (up?'▲ ':'▼ ') + Math.abs(pct).toFixed(1) + '% vs Previous Period';
+}
+
+// ============ SVG SPARKLINE ============
+function renderSparkline(hostId, values, isUp){
+  const {host, w, h} = clearAndGetSize(hostId);
+  if (!values.length){ return; }
+  const pad = 2;
+  const max = Math.max(...values), min = Math.min(...values);
+  const range = (max-min) || 1;
+  const stepX = values.length>1 ? (w-2*pad)/(values.length-1) : 0;
+  const pts = values.map((v,i)=>[pad+i*stepX, h-pad-((v-min)/range)*(h-2*pad)]);
+  const color = isUp ? COLORS.green600 : COLORS.red;
+
+  const svg = newSvg(w,h);
+  const areaId = 'grad-'+hostId;
+  const defs = svgEl('defs',{});
+  const grad = svgEl('linearGradient',{id:areaId, x1:'0',y1:'0',x2:'0',y2:'1'});
+  const s1 = svgEl('stop',{offset:'0%','stop-color':color,'stop-opacity':'0.28'});
+  const s2 = svgEl('stop',{offset:'100%','stop-color':color,'stop-opacity':'0'});
+  grad.appendChild(s1); grad.appendChild(s2); defs.appendChild(grad); svg.appendChild(defs);
+
+  let path = smoothPath(pts);
+  let areaPath = path + ` L ${pts[pts.length-1][0]},${h-pad} L ${pts[0][0]},${h-pad} Z`;
+
+  svg.appendChild(svgEl('path',{d:areaPath, fill:`url(#${areaId})`, stroke:'none'}));
+  svg.appendChild(svgEl('path',{d:path, fill:'none', stroke:color, 'stroke-width':'1.6', 'stroke-linejoin':'round','stroke-linecap':'round'}));
+  host.appendChild(svg);
+}
+
+function renderSparklines(rows, deltas){
+  // deltas: {revenue, profit, margin, units, satisfaction, aov} - each null or a number (pct change vs previous period)
+  const isUp = d => (d === null || d === undefined || isNaN(d)) ? true : d >= 0;
+
+  renderSparkline('spark-revenue', monthlySeries(rows, F.rev, 'sum').map(s=>s.value), isUp(deltas.revenue));
+  renderSparkline('spark-profit', monthlySeries(rows, F.p, 'sum').map(s=>s.value), isUp(deltas.profit));
+  renderSparkline('spark-margin', monthlySeries(rows, F.pm, 'avg').map(s=>s.value), isUp(deltas.margin));
+  renderSparkline('spark-units', monthlySeries(rows, F.u, 'sum').map(s=>s.value), isUp(deltas.units));
+  renderSparkline('spark-satisfaction', monthlySeries(rows, F.cs, 'avg').map(s=>s.value), isUp(deltas.satisfaction));
+  const aovMonthly = (()=>{
+    const m={};
+    rows.forEach(r=>{ const k=monthKey(r[F.d]); if(!m[k])m[k]={s:0,c:0}; m[k].s+=r[F.rev]; m[k].c+=1; });
+    return Object.keys(m).sort().map(k=>m[k].s/m[k].c);
+  })();
+  renderSparkline('spark-aov', aovMonthly, isUp(deltas.aov));
+}
+
+// ============ SVG AREA/LINE CHART (Revenue Trend / Transactions) ============
+function renderLineChart(hostId, series, opts){
+  opts = opts || {};
+  const {host, w, h} = clearAndGetSize(hostId);
+  if (!series.length) { host.innerHTML = '<div style="font-size:10px;color:#8a9690;text-align:center;padding-top:20px;">No data</div>'; return; }
+
+  const marginL = opts.marginL || 40;
+  const marginR = opts.marginR || 8;
+  const marginT = opts.marginT || 18;
+  const marginB = opts.marginB || 18;
+  const plotW = w - marginL - marginR;
+  const plotH = h - marginT - marginB;
+
+  const values = series.map(s=>s.value);
+  let max = Math.max(...values), min = Math.min(0, ...values);
+  if (max === min) max = max + 1;
+  const niceMax = max * 1.12;
+
+  const stepX = series.length>1 ? plotW/(series.length-1) : 0;
+  const xAt = i => marginL + i*stepX;
+  const yAt = v => marginT + plotH - ((v-min)/(niceMax-min))*plotH;
+
+  const svg = newSvg(w,h);
+  const defs = svgEl('defs',{});
+  const gradId = 'lg-'+hostId;
+  const grad = svgEl('linearGradient',{id:gradId,x1:'0',y1:'0',x2:'0',y2:'1'});
+  grad.appendChild(svgEl('stop',{offset:'0%','stop-color':opts.color||COLORS.green700,'stop-opacity':'0.30'}));
+  grad.appendChild(svgEl('stop',{offset:'100%','stop-color':opts.color||COLORS.green700,'stop-opacity':'0.02'}));
+  defs.appendChild(grad); svg.appendChild(defs);
+
+  const gridCount = 4;
+  for (let i=0;i<=gridCount;i++){
+    const v = min + (niceMax-min)*i/gridCount;
+    const y = yAt(v);
+    svg.appendChild(svgEl('line',{x1:marginL,x2:w-marginR,y1:y,y2:y,stroke:COLORS.line,'stroke-width':'1'}));
+    const t = svgEl('text',{x:marginL-6,y:y+3,'text-anchor':'end','font-size':'8','fill':'#5a6b62'});
+    t.textContent = fmtMoney(v);
+    svg.appendChild(t);
+  }
+
+  const labelEvery = Math.ceil(series.length / Math.max(6, Math.floor(plotW/45)));
+  series.forEach((s,i)=>{
+    if (i % labelEvery === 0 || i===series.length-1){
+      const t = svgEl('text',{x:xAt(i),y:h-4,'text-anchor':'middle','font-size':'7.5','fill':'#5a6b62'});
+      t.textContent = s.label;
+      svg.appendChild(t);
+    }
+  });
+
+  const pts = series.map((s,i)=>[xAt(i), yAt(s.value)]);
+  const linePath = smoothPath(pts);
+  const areaPath = linePath + ` L ${pts[pts.length-1][0]},${marginT+plotH} L ${pts[0][0]},${marginT+plotH} Z`;
+
+  svg.appendChild(svgEl('path',{d:areaPath, fill:`url(#${gradId})`, stroke:'none'}));
+  svg.appendChild(svgEl('path',{d:linePath, fill:'none', stroke:opts.color||COLORS.green700, 'stroke-width':'2','stroke-linejoin':'round'}));
+
+  let maxIdx=0,minIdx=0;
+  series.forEach((s,i)=>{ if(s.value>series[maxIdx].value) maxIdx=i; if(s.value<series[minIdx].value) minIdx=i; });
+
+  series.forEach((s,i)=>{
+    const r = (i===maxIdx||i===minIdx) ? 0 : (opts.dots===false? 0 : 2.2);
+    if (r>0) svg.appendChild(svgEl('circle',{cx:pts[i][0],cy:pts[i][1],r:r,fill:opts.color||COLORS.green700}));
+  });
+
+  if (opts.showMinMax !== false){
+    const clampX = x => Math.max(marginL+22, Math.min(w-marginR-22, x));
+    const mt = svgEl('text',{x:clampX(pts[maxIdx][0]),y:pts[maxIdx][1]-8,'text-anchor':'middle','font-size':'9','font-weight':'700','fill':COLORS.green700});
+    mt.textContent = fmtMoney(series[maxIdx].value);
+    svg.appendChild(mt);
+    svg.appendChild(svgEl('circle',{cx:pts[maxIdx][0],cy:pts[maxIdx][1],r:3,fill:'#fff',stroke:COLORS.green700,'stroke-width':'1.6'}));
+
+    if (minIdx !== maxIdx){
+      const nt = svgEl('text',{x:clampX(pts[minIdx][0]),y:pts[minIdx][1]+14,'text-anchor':'middle','font-size':'9','font-weight':'700','fill':COLORS.red});
+      nt.textContent = fmtMoney(series[minIdx].value);
+      svg.appendChild(nt);
+      svg.appendChild(svgEl('circle',{cx:pts[minIdx][0],cy:pts[minIdx][1],r:3,fill:'#fff',stroke:COLORS.red,'stroke-width':'1.6'}));
+    }
+  }
+
+  // hover guide line (hidden until interaction)
+  const guideLine = svgEl('line',{x1:0,x2:0,y1:marginT,y2:marginT+plotH,stroke:'#9aa6a0','stroke-width':'1','stroke-dasharray':'3,3',opacity:'0'});
+  svg.appendChild(guideLine);
+  const hoverDot = svgEl('circle',{cx:0,cy:0,r:4,fill:'#fff',stroke:opts.color||COLORS.green700,'stroke-width':'2',opacity:'0'});
+  svg.appendChild(hoverDot);
+
+  // invisible hit zones, one per data point, sized to half the gap on each side
+  const valueLabel = opts.valueLabel || 'Value';
+  series.forEach((s,i)=>{
+    const zoneW = series.length>1 ? stepX : plotW;
+    const zoneX = xAt(i) - zoneW/2;
+    const hitRect = svgEl('rect',{x:Math.max(marginL,zoneX), y:marginT, width:Math.min(zoneW, w), height:plotH, fill:'transparent'});
+    hitRect.style.cursor='pointer';
+    hitRect.addEventListener('mouseenter', (e)=>{
+      guideLine.setAttribute('x1', pts[i][0]); guideLine.setAttribute('x2', pts[i][0]); guideLine.setAttribute('opacity','1');
+      hoverDot.setAttribute('cx', pts[i][0]); hoverDot.setAttribute('cy', pts[i][1]); hoverDot.setAttribute('opacity','1');
+    });
+    hitRect.addEventListener('mousemove', (e)=>{
+      showTooltip(e.clientX, e.clientY, `<span class="tt-title">${s.label}</span>${valueLabel}: <b>${opts.tooltipFmt ? opts.tooltipFmt(s.value) : fmtMoney(s.value)}</b>`);
+    });
+    hitRect.addEventListener('mouseleave', ()=>{
+      guideLine.setAttribute('opacity','0'); hoverDot.setAttribute('opacity','0');
+      hideTooltip();
+    });
+    svg.appendChild(hitRect);
+  });
+
+  host.appendChild(svg);
+}
+
+// ============ SVG BAR CHART (vertical) ============
+function renderVBarChart(hostId, labels, values, colors, opts){
+  opts = opts||{};
+  const {host, w, h} = clearAndGetSize(hostId);
+  if (!labels.length){ host.innerHTML = '<div style="font-size:10px;color:#8a9690;text-align:center;padding-top:20px;">No data</div>'; return; }
+
+  const marginL = opts.marginL || 36;
+  const marginR = 6, marginT = 16, marginB = 16;
+  const plotW = w - marginL - marginR;
+  const plotH = h - marginT - marginB;
+
+  const max = Math.max(...values, 1) * 1.18;
+  const n = labels.length;
+  const slot = plotW / n;
+  const barW = Math.min(slot*0.55, opts.maxBar||40);
+
+  const svg = newSvg(w,h);
+  const gridCount = 4;
+  for (let i=0;i<=gridCount;i++){
+    const v = max*i/gridCount;
+    const y = marginT + plotH - (v/max)*plotH;
+    svg.appendChild(svgEl('line',{x1:marginL,x2:w-marginR,y1:y,y2:y,stroke:COLORS.line,'stroke-width':'1'}));
+    const t = svgEl('text',{x:marginL-5,y:y+3,'text-anchor':'end','font-size':'7.5','fill':'#5a6b62'});
+    t.textContent = fmtMoney(v);
+    svg.appendChild(t);
+  }
+
+  labels.forEach((lab,i)=>{
+    const cx = marginL + slot*i + slot/2;
+    const barH = (values[i]/max)*plotH;
+    const y = marginT+plotH-barH;
+    svg.appendChild(svgEl('rect',{x:cx-barW/2, y:y, width:barW, height:Math.max(barH,1), rx:4, fill:colors[i]}));
+    const vt = svgEl('text',{x:cx,y:y-5,'text-anchor':'middle','font-size':'8.5','font-weight':'700','fill':'#16241c'});
+    vt.textContent = fmtMoney(values[i]);
+    svg.appendChild(vt);
+    const lt = svgEl('text',{x:cx,y:h-4,'text-anchor':'middle','font-size':'8','font-weight':'600','fill':'#5a6b62'});
+    lt.textContent = lab;
+    svg.appendChild(lt);
+  });
+
+  host.appendChild(svg);
+}
+
+// ============ SVG SCATTER ============
+function renderScatterChart(hostId, points, trendLine, corr){
+  const {host, w, h} = clearAndGetSize(hostId);
+  if (!points.length){ host.innerHTML = '<div style="font-size:10px;color:#8a9690;text-align:center;padding-top:20px;">No data</div>'; return; }
+
+  const marginL = 38, marginR = 8, marginT = 10, marginB = 26;
+  const plotW = w - marginL - marginR;
+  const plotH = h - marginT - marginB;
+
+  const xs = points.map(p=>p.x), ys = points.map(p=>p.y);
+  const minX = Math.min(0,...xs), maxX = Math.max(...xs)*1.05 || 1;
+  const minY = Math.min(0,...ys), maxY = Math.max(...ys)*1.1 || 1;
+
+  const xAt = x => marginL + (x-minX)/(maxX-minX||1)*plotW;
+  const yAt = y => marginT + plotH - (y-minY)/(maxY-minY||1)*plotH;
+
+  const svg = newSvg(w,h);
+  for (let i=0;i<=3;i++){
+    const yv = minY + (maxY-minY)*i/3;
+    const y = yAt(yv);
+    svg.appendChild(svgEl('line',{x1:marginL,x2:w-marginR,y1:y,y2:y,stroke:COLORS.line,'stroke-width':'1'}));
+    const t = svgEl('text',{x:marginL-5,y:y+3,'text-anchor':'end','font-size':'7','fill':'#5a6b62'});
+    t.textContent = fmtMoney(yv); svg.appendChild(t);
+  }
+  for (let i=0;i<=4;i++){
+    const xv = minX + (maxX-minX)*i/4;
+    const x = xAt(xv);
+    const t = svgEl('text',{x:x,y:marginT+plotH+12,'text-anchor':'middle','font-size':'7','fill':'#5a6b62'});
+    t.textContent = fmtMoney(xv); svg.appendChild(t);
+  }
+  const xt = svgEl('text',{x:marginL,y:h-4,'text-anchor':'start','font-size':'8','fill':'#5a6b62','font-weight':'600'});
+  xt.textContent='Revenue'; svg.appendChild(xt);
+
+  const pointEls = [];
+  points.forEach(p=>{
+    const cx = xAt(p.x), cy = yAt(p.y);
+    const c = svgEl('circle',{cx:cx, cy:cy, r:2.4, fill:'rgba(46,150,80,0.5)'});
+    c.style.cursor = 'pointer';
+    c.addEventListener('mouseenter', ()=>{
+      c.setAttribute('r','4.2');
+      c.setAttribute('fill','rgba(20,80,44,0.9)');
+    });
+    c.addEventListener('mousemove', (e)=>{
+      showTooltip(e.clientX, e.clientY, `Revenue: <b>${fmtMoney(p.x)}</b><br>Profit: <b>${fmtMoney(p.y)}</b>`);
+    });
+    c.addEventListener('mouseleave', ()=>{
+      c.setAttribute('r','2.4');
+      c.setAttribute('fill','rgba(46,150,80,0.5)');
+      hideTooltip();
+    });
+    svg.appendChild(c);
+    pointEls.push(c);
+  });
+  if (trendLine && trendLine.length===2){
+    svg.appendChild(svgEl('line',{
+      x1:xAt(trendLine[0].x), y1:yAt(trendLine[0].y), x2:xAt(trendLine[1].x), y2:yAt(trendLine[1].y),
+      stroke:'#5a6b62','stroke-width':'1.4','stroke-dasharray':'5,4'
+    }));
+  }
+  const corrText = svgEl('text',{x:w-marginR,y:h-4,'text-anchor':'end','font-size':'8','fill':'#5a6b62'});
+  corrText.innerHTML = '';
+  const tspan1 = svgEl('tspan',{'font-weight':'600'});
+  tspan1.textContent = 'Correlation: ';
+  const tspan2 = svgEl('tspan',{'font-weight':'800','fill':'#14502c'});
+  tspan2.textContent = corr.toFixed(2);
+  corrText.appendChild(tspan1);
+  corrText.appendChild(tspan2);
+  svg.appendChild(corrText);
+
+  host.appendChild(svg);
+}
+
+// ============ SVG DONUT ============
+function renderDonut(hostId, segments, totalLabelId, totalValue){
+  const {host, w, h} = clearAndGetSize(hostId);
+  document.getElementById(totalLabelId).textContent = fmtMoney(totalValue);
+  if (!segments.length) return;
+  const size = Math.min(w,h);
+  const cx = w/2, cy = h/2;
+  const r = size*0.36, rInner = r*0.68;
+  const total = segments.reduce((a,s)=>a+s.value,0) || 1;
+
+  const svg = newSvg(w,h);
+  let startAngle = -Math.PI/2;
+  segments.forEach(seg=>{
+    const frac = seg.value/total;
+    const endAngle = startAngle + frac*Math.PI*2;
+    const path = donutSlicePath(cx,cy,r,rInner,startAngle,endAngle);
+    svg.appendChild(svgEl('path',{d:path, fill:seg.color}));
+    startAngle = endAngle;
+  });
+  host.appendChild(svg);
+}
+function donutSlicePath(cx,cy,rOuter,rInner,a0,a1){
+  const isFull = (a1-a0) >= Math.PI*2 - 0.0001;
+  if (isFull){
+    a1 = a0 + Math.PI*2 - 0.0001;
+  }
+  const x0o = cx + rOuter*Math.cos(a0), y0o = cy + rOuter*Math.sin(a0);
+  const x1o = cx + rOuter*Math.cos(a1), y1o = cy + rOuter*Math.sin(a1);
+  const x0i = cx + rInner*Math.cos(a1), y0i = cy + rInner*Math.sin(a1);
+  const x1i = cx + rInner*Math.cos(a0), y1i = cy + rInner*Math.sin(a0);
+  const largeArc = (a1-a0) > Math.PI ? 1 : 0;
+  return `M ${x0o},${y0o} A ${rOuter},${rOuter} 0 ${largeArc} 1 ${x1o},${y1o} L ${x0i},${y0i} A ${rInner},${rInner} 0 ${largeArc} 0 ${x1i},${y1i} Z`;
+}
+
+// ============ COMPONENT RENDERERS ============
+function renderRevenueTrend(rows){
+  const series = monthlySeries(rows, F.rev, 'sum');
+  renderLineChart('chart-revenue-trend', series, {color:COLORS.green700, marginL:44});
+}
+function renderTransactionsOverTime(rows){
+  const series = monthlySeries(rows, F.rev, 'count');
+  renderLineChart('chart-transactions', series, {color:COLORS.green600, marginL:26, showMinMax:false, dots:true});
+}
+function renderRevenueByRegion(rows){
+  const m = groupSum(rows, F.r, F.rev);
+  const order = ALL_REGIONS.filter(r=>m[r]!==undefined);
+  renderVBarChart('chart-revenue-region', order, order.map(r=>m[r]), order.map(r=>REGION_COLORS[r]), {marginL:34});
+}
+function renderAgeGroupChart(rows){
+  const m = groupSum(rows, F.ag, F.rev);
+  const order = ['above 56','46-55','36-45','26-35','18-25'].filter(a=>m[a]!==undefined);
+  renderVBarChart('chart-age-group', order, order.map(a=>m[a]), order.map(a=>AGE_COLORS[a]), {marginL:32, maxBar:34});
+}
+function renderCategoryTiles(rows){
+  const m = groupSum(rows, F.c, F.rev);
+  const total = Object.values(m).reduce((a,b)=>a+b,0) || 1;
+  const order = ['Electronics','Finance','Healthcare','Retail','Software'].filter(c=>m[c]!==undefined);
+  const wrap = document.getElementById('tiles-category');
+  wrap.innerHTML='';
+  order.forEach(cat=>{
+    const v = m[cat];
+    const pct = (v/total*100).toFixed(1);
+    const div = document.createElement('div');
+    div.className='tile';
+    div.style.background = CAT_COLORS[cat];
+    div.innerHTML = `<div class="t-label">${cat}</div><div class="t-value">${fmtMoney(v)}</div><div class="t-pct">${pct}%</div>`;
+    wrap.appendChild(div);
+  });
+}
+function renderHBarList(containerId, m, colorMap, order){
+  const wrap = document.getElementById(containerId);
+  wrap.innerHTML='';
+  const max = Math.max(...Object.values(m), 1);
+  order.forEach(key=>{
+    if (m[key]===undefined) return;
+    const v = m[key];
+    const pct = Math.max(2, (v/max*100));
+    const row = document.createElement('div');
+    row.className='hbar-row';
+    row.innerHTML = `
+      <div class="hbar-name">${key}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${pct}%;background:${colorMap[key]};"></div></div>
+      <div class="hbar-val">${fmtMoney(v)}</div>
+    `;
+    wrap.appendChild(row);
+  });
+}
+function renderProfitByCategory(rows){
+  const m = groupSum(rows, F.c, F.p);
+  const order = Object.keys(m).sort((a,b)=>m[b]-m[a]);
+  renderHBarList('hbar-category', m, CAT_COLORS, order);
+}
+function renderProfitByRegion(rows){
+  const m = groupSum(rows, F.r, F.p);
+  const order = Object.keys(m).sort((a,b)=>m[b]-m[a]);
+  renderHBarList('hbar-region', m, REGION_COLORS, order);
+}
+function renderProfitRevenueScatter(rows){
+  const pts = rows.map(r=>({x:r[F.rev], y:r[F.p]}));
+  const sample = pts.length > 350 ? pts.filter((_,i)=> i % Math.ceil(pts.length/350) === 0) : pts;
+
+  const n = pts.length;
+  let corr = 0, trendLine = null;
+  if (n>1){
+    const mx = pts.reduce((a,p)=>a+p.x,0)/n;
+    const my = pts.reduce((a,p)=>a+p.y,0)/n;
+    let sxy=0,sxx=0,syy=0;
+    pts.forEach(p=>{ sxy += (p.x-mx)*(p.y-my); sxx += (p.x-mx)**2; syy += (p.y-my)**2; });
+    corr = (sxx&&syy) ? sxy/Math.sqrt(sxx*syy) : 0;
+    const slope = sxx ? sxy/sxx : 0;
+    const intercept = my - slope*mx;
+    const xs = pts.map(p=>p.x);
+    const minX = Math.min(...xs), maxX = Math.max(...xs);
+    trendLine = [{x:minX, y:slope*minX+intercept},{x:maxX, y:slope*maxX+intercept}];
+  }
+  renderScatterChart('chart-profit-revenue', sample, trendLine, corr);
+}
+function renderGenderDonut(rows){
+  const m = groupSum(rows, F.g, F.rev);
+  const total = Object.values(m).reduce((a,b)=>a+b,0) || 1;
+  const order = ['Male','Female','Other'].filter(g=>m[g]!==undefined);
+  const segments = order.map(g=>({value:m[g], color:GENDER_COLORS[g]}));
+  renderDonut('chart-gender-donut', segments, 'donut-total', total);
+
+  const legend = document.getElementById('legend-gender');
+  legend.innerHTML='';
+  order.forEach(g=>{
+    const v = m[g], pct = (v/total*100).toFixed(1);
+    const row = document.createElement('div');
+    row.className='legend-row';
+    row.innerHTML = `<div class="lname"><span class="ldot" style="background:${GENDER_COLORS[g]};"></span>${g}</div><div class="lval">${fmtMoney(v)}</div><div class="lpct">${pct}%</div>`;
+    legend.appendChild(row);
+  });
+}
+
+// ============ RENDER ALL ============
+function renderAll(){
+  const rows = getFiltered();
+  const prevRows = getPreviousPeriod();
+  const deltas = renderKPIs(rows, prevRows);
+  renderSparklines(rows, deltas);
+  renderRevenueTrend(rows);
+  renderCategoryTiles(rows);
+  renderRevenueByRegion(rows);
+  renderProfitRevenueScatter(rows);
+  renderProfitByCategory(rows);
+  renderProfitByRegion(rows);
+  renderAgeGroupChart(rows);
+  renderGenderDonut(rows);
+  renderTransactionsOverTime(rows);
+}
+
+// ============ FILTER UI ============
+function buildMultiSelectDropdown(ddId, options, stateSet, labelId){
+  const dd = document.getElementById(ddId);
+  dd.innerHTML='';
+
+  // "All" master toggle
+  const allLab = document.createElement('label');
+  allLab.className = 'dd-all-option';
+  const allCb = document.createElement('input');
+  allCb.type='checkbox';
+  allCb.checked = stateSet.size === options.length;
+  allLab.appendChild(allCb);
+  allLab.appendChild(document.createTextNode('All'));
+  dd.appendChild(allLab);
+
+  const divider = document.createElement('div');
+  divider.className = 'dd-divider';
+  dd.appendChild(divider);
+
+  const checkboxes = [];
+  options.forEach(opt=>{
+    const lab = document.createElement('label');
+    const cb = document.createElement('input');
+    cb.type='checkbox';
+    cb.checked = stateSet.has(opt);
+    cb.addEventListener('change', (e)=>{
+      e.stopPropagation();
+      if (cb.checked) stateSet.add(opt); else stateSet.delete(opt);
+      allCb.checked = stateSet.size === options.length;
+      updateFilterLabel(stateSet, options, labelId);
+      renderAll();
+    });
+    lab.appendChild(cb);
+    lab.appendChild(document.createTextNode(opt));
+    dd.appendChild(lab);
+    checkboxes.push(cb);
+  });
+
+  allCb.addEventListener('change', (e)=>{
+    e.stopPropagation();
+    if (allCb.checked){
+      options.forEach(o=>stateSet.add(o));
+    } else {
+      stateSet.clear();
+    }
+    checkboxes.forEach(cb=> cb.checked = allCb.checked);
+    updateFilterLabel(stateSet, options, labelId);
+    renderAll();
+  });
+}
+function updateFilterLabel(stateSet, options, labelId){
+  const el = document.getElementById(labelId);
+  if (stateSet.size === options.length) el.textContent = 'All';
+  else if (stateSet.size === 0) el.textContent = 'None';
+  else if (stateSet.size === 1) el.textContent = [...stateSet][0];
+  else el.textContent = stateSet.size + ' selected';
+}
+function setupDropdownToggle(boxId, ddId){
+  const box = document.getElementById(boxId);
+  const dd = document.getElementById(ddId);
+  box.addEventListener('click', (e)=>{
+    const wasOpen = dd.classList.contains('open');
+    document.querySelectorAll('.dd-panel.open').forEach(p=>p.classList.remove('open'));
+    if (!wasOpen) dd.classList.add('open');
+    e.stopPropagation();
+  });
+}
+document.addEventListener('click', ()=>{
+  document.querySelectorAll('.dd-panel.open').forEach(p=>p.classList.remove('open'));
+});
+
+let resizeTimer=null;
+window.addEventListener('resize', ()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(renderAll, 120);
+});
+
+function init(){
+  buildMultiSelectDropdown('dd-region', ALL_REGIONS, state.region, 'f-region-label');
+  buildMultiSelectDropdown('dd-category', ALL_CATEGORIES, state.category, 'f-category-label');
+  buildMultiSelectDropdown('dd-gender', ALL_GENDERS, state.gender, 'f-gender-label');
+  buildMultiSelectDropdown('dd-agegroup', ALL_AGEGROUPS, state.agegroup, 'f-agegroup-label');
+
+  setupDropdownToggle('f-date','dd-date');
+  setupDropdownToggle('f-region','dd-region');
+  setupDropdownToggle('f-category','dd-category');
+  setupDropdownToggle('f-gender','dd-gender');
+  setupDropdownToggle('f-agegroup','dd-agegroup');
+
+  document.getElementById('date-apply').addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const from = document.getElementById('date-from').value;
+    const to = document.getElementById('date-to').value;
+    if (from && to && from <= to){
+      state.dateFrom = from;
+      state.dateTo = to;
+      const f = new Date(from), t = new Date(to);
+      const opts = {day:'2-digit',month:'short',year:'numeric'};
+      document.getElementById('f-date-label').textContent = `${f.toLocaleDateString('en-GB',opts)} - ${t.toLocaleDateString('en-GB',opts)}`;
+      document.getElementById('dd-date').classList.remove('open');
+      renderAll();
+    }
+  });
+  document.getElementById('date-from').addEventListener('click', e=>e.stopPropagation());
+  document.getElementById('date-to').addEventListener('click', e=>e.stopPropagation());
+
+  document.getElementById('reset-filters').addEventListener('click', ()=>{
+    state.dateFrom = MIN_DATE; state.dateTo = MAX_DATE;
+    state.region = new Set(ALL_REGIONS);
+    state.category = new Set(ALL_CATEGORIES);
+    state.gender = new Set(ALL_GENDERS);
+    state.agegroup = new Set(ALL_AGEGROUPS);
+    document.getElementById('date-from').value = MIN_DATE;
+    document.getElementById('date-to').value = MAX_DATE;
+    document.getElementById('f-date-label').textContent = '01 Jan 2023 - 14 Apr 2026';
+    buildMultiSelectDropdown('dd-region', ALL_REGIONS, state.region, 'f-region-label');
+    buildMultiSelectDropdown('dd-category', ALL_CATEGORIES, state.category, 'f-category-label');
+    buildMultiSelectDropdown('dd-gender', ALL_GENDERS, state.gender, 'f-gender-label');
+    buildMultiSelectDropdown('dd-agegroup', ALL_AGEGROUPS, state.agegroup, 'f-agegroup-label');
+    document.getElementById('f-region-label').textContent='All';
+    document.getElementById('f-category-label').textContent='All';
+    document.getElementById('f-gender-label').textContent='All';
+    document.getElementById('f-agegroup-label').textContent='All';
+    renderAll();
+  });
+
+  renderAll();
+}
+
+window.addEventListener('DOMContentLoaded', init);
+
+</script>
+</body>
+</html>
