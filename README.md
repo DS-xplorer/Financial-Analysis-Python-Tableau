@@ -23,7 +23,6 @@ The objective was to transform raw financial data into meaningful business insig
 * Python
 * Pandas
 * NumPy
-* Tableau
 * Matplotlib
 * Jupyter Notebook
 
@@ -87,4 +86,4 @@ This project demonstrates my ability to clean raw datasets, perform business ana
 
 **Vibha Rana**
 
-**Skills:** Python • Tableau • Data Cleaning • Data Analysis • Data Visualization • Business Intelligence
+**Skills:** Python • Data Cleaning • Data Analysis • Data Visualization • Business Intelligence
