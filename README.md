@@ -1,4 +1,4 @@
-# 📊 Financial Analysis Dashboard | Python & Tableau
+# 📊 Financial Analysis Dashboard | Python
 
 ## 📌 Project Overview
 
